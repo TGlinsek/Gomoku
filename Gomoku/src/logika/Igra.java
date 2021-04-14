@@ -31,14 +31,25 @@ public class Igra {
 	}
 	
 	
-	public boolean igraj(Koordinati k) {
-		if (matrika.vrniClen(k) == Polje.PRAZNO) {
-			matrika.zamenjajClen(k, igralecNaPotezi.barvaPoteze());
-			igralecNaPotezi = igralecNaPotezi.pridobiNasprotnika();
-			return true;
+	public void spremeniStanjeIgre(Koordinati k) {
+		if (matrika.imamoResitev(k)) {
+			switch (matrika.vrniClen(k)) {
+				case CRNO: trenutnoStanje = Stanje.ZMAGA_CRNI;
+				case BELO: trenutnoStanje = Stanje.ZMAGA_BELI;
+				case PRAZNO: assert false; // tole nevem ce je potrebno, ker se if itak ne izpolni, ce je polje prazno. Ce umaknem, pa tezi
+			}
 		}
-		else {
-			return false;
+		else if (matrika.matrikaJePolna()) {
+			trenutnoStanje = Stanje.NEODLOCENO;
 		}
+		else trenutnoStanje = Stanje.V_TEKU;
+	}
+	
+	
+	public boolean igraj(Koordinati k) {  // metoda .igraj() vrne true, èe je poteza ustrezna, drugaèe false
+		if (!matrika.dodajKamen(k, igralecNaPotezi.barvaPoteze())) return false;  // .dodajKamen() vrne true, èe je poteza bila ustrezna, drugaèe false
+		spremeniStanjeIgre(k);
+		igralecNaPotezi = igralecNaPotezi.pridobiNasprotnika();
+		return true;
 	}
 }
