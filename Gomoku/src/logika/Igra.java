@@ -1,5 +1,8 @@
 package logika;
 
+import java.util.List;
+import java.util.Set;
+
 import splosno.Koordinati;
 
 public class Igra {
@@ -7,6 +10,7 @@ public class Igra {
 	private Matrika matrika;
 	public Igralec igralecNaPotezi;
 	public Stanje trenutnoStanje;
+	public Set<Vrsta> zmagovalneVrste;
 	
 	
 	public Igra() {
@@ -16,7 +20,7 @@ public class Igra {
 	
 	public Igra(int stranica) {
 		this.matrika = new Matrika(stranica);
-		this.igralecNaPotezi = Igralec.BELI;
+		this.igralecNaPotezi = Igralec.CRNI;  // baje èrni vedno zaène
 		this.trenutnoStanje = Stanje.V_TEKU;
 	}
 	
@@ -32,6 +36,7 @@ public class Igra {
 	
 	
 	public void spremeniStanjeIgre(Koordinati k) {
+		// if (zmagovalneVrste.size() != 0) {
 		if (matrika.imamoResitev(k)) {
 			switch (matrika.vrniClen(k)) {
 				case CRNO: trenutnoStanje = Stanje.ZMAGA_CRNI;
@@ -48,8 +53,19 @@ public class Igra {
 	
 	public boolean igraj(Koordinati k) {  // metoda .igraj() vrne true, èe je poteza ustrezna, drugaèe false
 		if (!matrika.dodajKamen(k, igralecNaPotezi.barvaPoteze())) return false;  // .dodajKamen() vrne true, èe je poteza bila ustrezna, drugaèe false
+		// zmagovalneVrste = this.resitve(k);
 		spremeniStanjeIgre(k);
 		igralecNaPotezi = igralecNaPotezi.pridobiNasprotnika();
 		return true;
+	}
+	
+	
+	public List<Koordinati> vrniVsaPraznaPolja() {
+		return this.matrika.vrniVsaPraznaPolja();
+	}
+	
+	
+	public boolean resitve (Koordinati k) {
+		return this.matrika.imamoResitev(k);
 	}
 }

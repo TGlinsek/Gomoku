@@ -3,7 +3,6 @@ package logika;
 import java.util.LinkedList;
 import java.util.List;
 
-
 import splosno.Koordinati;
 
 public class Matrika {
@@ -151,7 +150,7 @@ public class Matrika {
 				if (stevec == 5) {
 					return true;
 				}
-			}			
+			}
 		}
 		return false;
 	}
@@ -192,13 +191,27 @@ public class Matrika {
 				if (stevec == 5) {
 					return true;
 				}
-			}			
+			}
 		}
 		return false;
 	}
 	
 	
 	public boolean imamoResitev(Koordinati k) {
+		/*
+		Set<Vrsta> vseResitve = new HashSet<Vrsta>();  // ustvarimo množico vseh vrst, ki so trenutno 'pet v vrsto'
+		vseResitve.add(new Vrsta(  // TODO
+				new Koordinati[]{  // samo primer
+					new Koordinati(0, 0),
+					new Koordinati(0, 0),
+					new Koordinati(0, 0),
+					new Koordinati(0, 0),
+					new Koordinati(0, 0)
+				}
+			)
+		);
+		return vseResitve  // množica rešitev (vrst) bo prazna, èe še igre ni konec oz. je neodloèeno
+		*/
 		return preveriVrsto(k) || preveriStolpec(k) || preveriDiag1(k) || preveriDiag2(k);
 	}
 	
