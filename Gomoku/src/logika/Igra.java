@@ -11,10 +11,12 @@ public class Igra {
 	public Igralec igralecNaPotezi;
 	public Stanje trenutnoStanje;
 	public Set<Vrsta> zmagovalneVrste;
+	public int velikost;
+	public static int N = 15;
 	
 	
 	public Igra() {
-		this(15);  // klièe konstruktor s parametrom
+		this(N);  // klièe konstruktor s parametrom
 	}
 	
 	
@@ -22,16 +24,17 @@ public class Igra {
 		this.matrika = new Matrika(stranica);
 		this.igralecNaPotezi = Igralec.CRNI;  // baje èrni vedno zaène
 		this.trenutnoStanje = Stanje.V_TEKU;
-	}
-	
-	
-	public int dimenzijaMatrike() {
-		return matrika.vrniDimenzije();
+		this.velikost = matrika.vrniDimenzije();
 	}
 	
 	
 	public boolean igraJePolna() {
 		return this.matrika.matrikaJePolna();
+	}
+	
+	
+	public Polje vrniClen(Koordinati k) {
+		return this.matrika.vrniClen(k);
 	}
 	
 	
@@ -65,7 +68,7 @@ public class Igra {
 	}
 	
 	
-	public boolean resitve (Koordinati k) {
+	public boolean resitve(Koordinati k) {
 		return this.matrika.imamoResitev(k);
 	}
 }

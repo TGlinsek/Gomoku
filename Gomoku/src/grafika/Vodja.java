@@ -14,20 +14,22 @@ import tekstovni_vmesnik.VrstaIgralca;
 
 public class Vodja {	
 	
-	public static Map<Igralec,VrstaIgralca> vrstaIgralca;
+	public static Map<Igralec, VrstaIgralca> vrstaIgralca;
 	
 	public static Okno okno;
 	
 	public static Igra igra = null;
 	
 	public static boolean clovekNaVrsti = false;
-		
-	public static void igramoNovoIgro () {
-		igra = new Igra ();
-		igramo ();
+	
+	
+	public static void igramoNovoIgro() {
+		igra = new Igra();
+		igramo();
 	}
 	
-	public static void igramo () {
+	
+	public static void igramo() {
 		okno.osveziGUI();
 		switch (igra.trenutnoStanje) {
 		case ZMAGA_CRNI: 
@@ -48,7 +50,8 @@ public class Vodja {
 		}
 	}
 	
-	private static Random random = new Random ();
+	
+	private static Random random = new Random();
 	
 //	public static void igrajRacunalnikovoPotezo() {
 //		List<Koordinati> moznePoteze = igra.poteze();
@@ -75,17 +78,16 @@ public class Vodja {
 				try {poteza = get();} catch (Exception e) {};
 				if (igra == zacetkaIgra) {
 					igra.igraj(poteza);
-					igramo ();
+					igramo();
 				}
 			}
 		};
 		worker.execute();
 	}
-		
+	
+	
 	public static void igrajClovekovoPotezo(Koordinati poteza) {
 		if (igra.igraj(poteza)) clovekNaVrsti = false;
-		igramo ();
+		igramo();
 	}
-
-
 }
