@@ -6,7 +6,6 @@ public class Vrsta {
 
 	public Koordinati[] tabelaKoordinat;
 	
-	
 	public Vrsta(Koordinati[] koordinate) {
 		this.tabelaKoordinat = koordinate;
 	}

@@ -77,7 +77,9 @@ public class Vodja {
 				Koordinati poteza = null;
 				try {poteza = get();} catch (Exception e) {};
 				if (igra == zacetkaIgra) {
+					igra.matrika.dodajVrste(poteza);
 					igra.igraj(poteza);
+					
 					igramo();
 				}
 			}
@@ -87,6 +89,7 @@ public class Vodja {
 	
 	
 	public static void igrajClovekovoPotezo(Koordinati poteza) {
+		igra.matrika.dodajVrste(poteza);
 		if (igra.igraj(poteza)) clovekNaVrsti = false;
 		igramo();
 	}

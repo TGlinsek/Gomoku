@@ -14,7 +14,7 @@ import java.util.Set;
 
 import javax.swing.JPanel;
 
-import graficni_vmesnik.Vodja;
+import grafika.Vodja;
 
 import logika.Igra;
 // import logika.Igralec;
@@ -25,7 +25,7 @@ import splosno.Koordinati;
 
 
 /**
- * Pravokotno obmoèje, v katerem je narisano igralno polje.
+ * Pravokotno obmoï¿½je, v katerem je narisano igralno polje.
  */
 @SuppressWarnings("serial")
 public class Platno extends JPanel implements MouseListener {
@@ -65,13 +65,13 @@ public class Platno extends JPanel implements MouseListener {
 	}
 	
 	
-	// Širina enega polja
+	// ï¿½irina enega polja
 	private double sirinaPolja() {
 		return Math.min(getWidth(), getHeight()) / Igra.N;
 	}
 	
 	
-	// Relativna širina èrte
+	// Relativna ï¿½irina ï¿½rte
 	private final static double LINE_WIDTH = 0.08;
 	
 	
@@ -112,7 +112,7 @@ public class Platno extends JPanel implements MouseListener {
 	}
 	
 	
-	private void pobarvajOzadjePolja(Graphics2D g2, Koordinati k) {  // barvo nastavimo še pred klicem te metode
+	private void pobarvajOzadjePolja(Graphics2D g2, Koordinati k) {  // barvo nastavimo ï¿½e pred klicem te metode
 		g2.fillRect(
 				(int) (sirinaPolja * k.getX()), 
 				(int) (sirinaPolja * k.getY()), 
@@ -142,7 +142,7 @@ public class Platno extends JPanel implements MouseListener {
 		g2.setColor(barvaMreze);
 		g2.setStroke(new BasicStroke((float) (sirinaPolja * LINE_WIDTH)));
 		for (int i = 1; i < Igra.N; i++) {
-			// navpiène èrte
+			// navpiï¿½ne ï¿½rte
 			g2.drawLine(
 					(int) (i * sirinaPolja),
 				    (int) (0),
@@ -150,7 +150,7 @@ public class Platno extends JPanel implements MouseListener {
 				    (int) (Igra.N * sirinaPolja)
 			);
 			
-			// vodoravne èrte
+			// vodoravne ï¿½rte
 			g2.drawLine(
 					(int) (0),
 				    (int) (i * sirinaPolja),
@@ -184,7 +184,7 @@ public class Platno extends JPanel implements MouseListener {
 	
 	
 	@Override
-	protected void paintComponent(Graphics g) {  // se klièe, ko uporabimo repaint(g);
+	protected void paintComponent(Graphics g) {  // se kliï¿½e, ko uporabimo repaint(g);
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 
@@ -193,6 +193,8 @@ public class Platno extends JPanel implements MouseListener {
 		narisiMrezo(g2);
 		
 		narisiKamne(g2);
+		
+		repaint();
 	}
 	
 	
@@ -215,6 +217,7 @@ public class Platno extends JPanel implements MouseListener {
 				Vodja.igrajClovekovoPotezo (new Koordinati(i, j));
 			}
 		}
+		repaint();
 	}
 	
 	
