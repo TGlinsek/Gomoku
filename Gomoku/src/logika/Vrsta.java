@@ -11,10 +11,15 @@ public class Vrsta {
 	}
 	
 	
-	/*  TODO
 	@Override
 	public String toString() {
-		
+		String niz = "[";
+		for (Koordinati k : this.tabelaKoordinat) {
+			niz += "(" + k.getX() + ", " + k.getY() + ")";
+			niz += ", ";
+		}
+		niz = niz.substring(0, niz.length() - 2);
+		niz += "]";
+		return niz;
 	}
-	*/
 }

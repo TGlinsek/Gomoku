@@ -45,7 +45,7 @@ public class Platno extends JPanel implements MouseListener {
 		setBackground(Color.WHITE);
 		this.addMouseListener(this);
 		
-		sirinaPolja = sirinaPolja();
+		// sirinaPolja = sirinaPolja();  // na tem mestu je igra še null, zato ne moremo pridobiti njene velikosti
 		
 		barvaRoba = Color.BLACK;
 		barvaMreze = Color.BLACK;
@@ -65,9 +65,14 @@ public class Platno extends JPanel implements MouseListener {
 	}
 	
 	
+	public void nastaviVelikostPolj() {
+		this.sirinaPolja = sirinaPolja();
+	}
+	
+	
 	// ï¿½irina enega polja
 	private double sirinaPolja() {
-		return Math.min(getWidth(), getHeight()) / Igra.velikost;
+		return Math.min(getWidth(), getHeight()) / Vodja.igra.velikost;
 	}
 	
 	
@@ -149,20 +154,20 @@ public class Platno extends JPanel implements MouseListener {
 	private void narisiMrezo(Graphics2D g2) {
 		g2.setColor(barvaMreze);
 		g2.setStroke(new BasicStroke((float) (sirinaPolja * LINE_WIDTH)));
-		for (int i = 1; i < Igra.velikost; i++) {
+		for (int i = 1; i < Vodja.igra.velikost; i++) {
 			// navpiï¿½ne ï¿½rte
 			g2.drawLine(
 					(int) (i * sirinaPolja),
 				    (int) (0),
 				    (int) (i * sirinaPolja),
-				    (int) (Igra.velikost * sirinaPolja)
+				    (int) (Vodja.igra.velikost * sirinaPolja)
 			);
 			
 			// vodoravne ï¿½rte
 			g2.drawLine(
 					(int) (0),
 				    (int) (i * sirinaPolja),
-				    (int) (Igra.velikost * sirinaPolja),
+				    (int) (Vodja.igra.velikost * sirinaPolja),
 				    (int) (i * sirinaPolja)
 			);
 		}
@@ -182,7 +187,10 @@ public class Platno extends JPanel implements MouseListener {
 					default: break;
 					}
 					*/
-					narisiKamen(g2, k, poljuPrirediBarvo.get(igra.vrniClen(k)));
+					Polje polje = igra.vrniClen(k);
+					if (polje != Polje.PRAZNO) {
+						narisiKamen(g2, k, poljuPrirediBarvo.get(polje));
+					}
 				}
 			}
 		} else {
@@ -193,6 +201,10 @@ public class Platno extends JPanel implements MouseListener {
 	
 	@Override
 	protected void paintComponent(Graphics g) {  // se kliï¿½e, ko uporabimo repaint(g);
+		if (Vodja.igra == null) {
+			return;
+		}
+
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 
@@ -202,12 +214,15 @@ public class Platno extends JPanel implements MouseListener {
 		
 		narisiKamne(g2);
 		
-		repaint();
+		// repaint();  // to samo klièe paintComponent
 	}
 	
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		if (Vodja.igra == null) {
+			return;
+		}
 		if (Vodja.clovekNaVrsti) {
 			int x = e.getX();
 			int y = e.getY();

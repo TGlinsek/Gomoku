@@ -31,6 +31,7 @@ public class Vodja {
 	
 	public static void igramoNovoIgro() {
 		igra = new Igra();
+		okno.nastaviVelikostPoljVPlatnu();
 		igramo();
 	}
 	
@@ -38,6 +39,7 @@ public class Vodja {
 	public static void igramo() {
 		okno.osveziGUI();
 		igra.spremeniStanje();
+		
 		switch (igra.trenutnoStanje) {
 		case ZMAGA_CRNI: 
 		case ZMAGA_BELI: 
@@ -69,14 +71,29 @@ public class Vodja {
 //		igramo ();
 //	}
 	
-	public static Inteligenca racunalnikovaInteligenca = new Minimax(1);
+	
+	// public static Inteligenca racunalnikovaInteligenca = new Minimax(1);
+	
+	
+	private static Random random = new Random ();  // le zaradi metode racunalnikovaPoteza
+	
+	public static Koordinati racunalnikovaPoteza(Igra igra) {  // zaèasna metoda za testiranje grafike
+		List<Koordinati> moznePoteze = igra.vrniVsaPraznaPolja();
+		int randomIndex = random.nextInt(moznePoteze.size());
+		Koordinati poteza = moznePoteze.get(randomIndex);
+		if (igra.igraj(poteza)) return poteza;
+		assert false;
+		return null;
+	}
+	
 	
 	public static void igrajRacunalnikovoPotezo() {
 		Igra zacetkaIgra = igra;
 		SwingWorker<Koordinati, Void> worker = new SwingWorker<Koordinati, Void> () {
 			@Override
 			protected Koordinati doInBackground() {
-				Koordinati poteza = racunalnikovaInteligenca.izberiPotezo(igra);
+				// Koordinati poteza = racunalnikovaInteligenca.izberiPotezo(igra);
+				Koordinati poteza = racunalnikovaPoteza(igra);  // zaèasna metoda
 				
 				try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
 				//List<Koordinati> moznePoteze = igra.vrniVsaPraznaPolja();

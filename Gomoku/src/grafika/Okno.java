@@ -102,6 +102,11 @@ public class Okno extends JFrame implements ActionListener {
 	}
 	
 	
+	public void nastaviVelikostPoljVPlatnu() {
+		this.platno.nastaviVelikostPolj();
+	}
+	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == igraClovekRacunalnik) {

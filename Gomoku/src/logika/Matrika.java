@@ -1,5 +1,6 @@
 package logika;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,19 @@ public class Matrika {
 		preberiPraznaPolja();
 	}
 	
+	
+	@Override
+	public String toString() {
+		// return Arrays.deepToString(this.matrika);  // to izpiše celotno matriko v eni vrstici
+		String niz = "";
+		for (Polje[] vrsta : this.matrika) {
+			// niz += vrsta.toString();
+			niz += Arrays.toString(vrsta);
+			niz += "\n";
+		}
+		return niz;
+	}
+
 	
 	public int vrniDimenzije() {
 		return stranica;

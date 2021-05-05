@@ -14,26 +14,36 @@ public class Igra {
 	
 	//public List<Vrsta> okoliskeVrste;
 	public Set<Vrsta> zmagovalneVrste;
-	public static int velikost = 15;
+	public int velikost;
+	private static int privzetaVelikost = 15;
 	public static int dolzinaVrste = 5;
 	public static final List<Vrsta> VRSTE = new LinkedList<Vrsta>();
-
+	
 	
 	public Igra(int stranica) {
 		this.matrika = new Matrika(stranica);
 		this.igralecNaPotezi = Igralec.CRNI;  // baje crni vedno zacne
 		this.trenutnoStanje = Stanje.V_TEKU;
-		this.velikost = matrika.vrniDimenzije();
+		// this.velikost = matrika.vrniDimenzije();  // matrika mora prevzeti velikost matrike in ne obratno
+		this.velikost = stranica;
 		nastaviVrste();
 	}
 	
+	
+	@Override
+	public String toString() {
+		return this.matrika.toString();
+	}
+	
+	
 	public Igra() {
-		this(15);  // klice konstruktor s parametrom
+		this(privzetaVelikost);  // klice konstruktor s parametrom
 	}
 	
 	public Igra(Igra igra) {
 		Polje[][] mat = igra.matrika.pridobiMatriko();
-		this.velikost = matrika.vrniDimenzije();
+		// this.velikost = matrika.vrniDimenzije();
+		this.velikost = igra.velikost;
 		this.matrika = new Matrika(velikost);
 		Polje[][] kopijaMat = this.matrika.pridobiMatriko();
 		for (int i = 0; i < velikost; i++) {
@@ -44,7 +54,7 @@ public class Igra {
 		this.igralecNaPotezi = igra.igralecNaPotezi;
 	}
 		
-	public void nastaviVrste() {
+	public void nastaviVrste() {  // vse vrste v igri
 		int[][] smer = {{1,0}, {0,1}, {1,1}, {1,-1}};
 		for (int x = 0; x < velikost; x++) {
 			for (int y = 0; y < velikost; y++) {
@@ -112,6 +122,7 @@ public class Igra {
 		for (int i = 0; i < velikost; i++) {
 			for (int j = 0; j < velikost; j++) {
 				if (matrika.vrniClen(new Koordinati(i,j)) == Polje.PRAZNO) trenutnoStanje = Stanje.V_TEKU;
+				return;
 			}
 		}
 		// Polje je polno, rezultat je neodločen

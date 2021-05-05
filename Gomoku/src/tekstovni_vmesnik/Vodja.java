@@ -18,7 +18,7 @@ public class Vodja {
 	
 	private static BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 	
-	private static Map<Igralec,VrstaIgralca> vrstaIgralca;
+	private static Map<Igralec, VrstaIgralca> vrstaIgralca;
 	
 	
 	public static void igramo () throws IOException {
@@ -30,15 +30,15 @@ public class Vodja {
 			System.out.println(" 4 - izhod");
 			String s = r.readLine();
 			if (s.equals("1")) {
-				vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+				vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
 				vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.C);
 				vrstaIgralca.put(Igralec.BELI, VrstaIgralca.R);
 			} else if (s.equals("2")) {
-				vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+				vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
 				vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.R);
 				vrstaIgralca.put(Igralec.BELI, VrstaIgralca.C);
 			} else if (s.equals("3")) {
-				vrstaIgralca = new EnumMap<Igralec,VrstaIgralca>(Igralec.class);
+				vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
 				vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.C);
 				vrstaIgralca.put(Igralec.BELI, VrstaIgralca.C);
 			} else if (s.equals("4")) {
@@ -88,7 +88,7 @@ public class Vodja {
 	
 	public static Koordinati racunalnikovaPoteza(Igra igra) {
 		List<Koordinati> moznePoteze = igra.vrniVsaPraznaPolja();
-		System.out.println(moznePoteze.size());
+		// System.out.println(moznePoteze.size());
 		int randomIndex = random.nextInt(moznePoteze.size());
 		Koordinati poteza = moznePoteze.get(randomIndex);
 		if (igra.igraj(poteza)) return poteza;
@@ -115,11 +115,6 @@ public class Vodja {
 			} catch (NumberFormatException e) {
 				System.out.println("Napaèen format"); continue;
 			}
-			/* mislim, da lahko to kodo zbrišemo
-			if (x < 0 || x >= igra.dimenzijaMatrike() || y < 0 || y >= igra.dimenzijaMatrike()) {
-				System.out.println("Napaèen format"); continue;
-			}
-			*/
 			Koordinati poteza = new Koordinati(x, y);
 			if (igra.igraj(poteza)) return poteza;
 			System.out.println(poteza.toString() + " ni možna");
