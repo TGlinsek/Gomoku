@@ -67,7 +67,7 @@ public class Platno extends JPanel implements MouseListener {
 	
 	// �irina enega polja
 	private double sirinaPolja() {
-		return Math.min(getWidth(), getHeight()) / Igra.N;
+		return Math.min(getWidth(), getHeight()) / Igra.velikost;
 	}
 	
 	
@@ -124,15 +124,23 @@ public class Platno extends JPanel implements MouseListener {
 	
 	private void pobarvajZmagovalnoVrsto(Graphics2D g2) {
 		// pobarvamo ozadje zmagovalne vrste
-		Set<Vrsta> vrste = null;
-		if (Vodja.igra != null) {
-			vrste = Vodja.igra.zmagovalneVrste;
-		
+//		Set<Vrsta> vrste = null;
+//		if (Vodja.igra != null) {
+//			vrste = Vodja.igra.zmagovalneVrste;
+//		
+//			g2.setColor(barvaPolja);
+//			for (Vrsta vrsta : vrste) {
+//				for (Koordinati k : vrsta.tabelaKoordinat) {
+//					pobarvajOzadjePolja(g2, k);
+//				}
+//			}
+//		}
+		Vrsta vrsta = null;
+		if (Vodja.igra != null) {vrsta = Vodja.igra.zmagovalnaVrsta();}
+		if (vrsta != null) {
 			g2.setColor(barvaPolja);
-			for (Vrsta vrsta : vrste) {
-				for (Koordinati k : vrsta.tabelaKoordinat) {
-					pobarvajOzadjePolja(g2, k);
-				}
+			for (Koordinati k : vrsta.tabelaKoordinat) {
+				pobarvajOzadjePolja(g2, k);
 			}
 		}
 	}
@@ -141,20 +149,20 @@ public class Platno extends JPanel implements MouseListener {
 	private void narisiMrezo(Graphics2D g2) {
 		g2.setColor(barvaMreze);
 		g2.setStroke(new BasicStroke((float) (sirinaPolja * LINE_WIDTH)));
-		for (int i = 1; i < Igra.N; i++) {
+		for (int i = 1; i < Igra.velikost; i++) {
 			// navpi�ne �rte
 			g2.drawLine(
 					(int) (i * sirinaPolja),
 				    (int) (0),
 				    (int) (i * sirinaPolja),
-				    (int) (Igra.N * sirinaPolja)
+				    (int) (Igra.velikost * sirinaPolja)
 			);
 			
 			// vodoravne �rte
 			g2.drawLine(
 					(int) (0),
 				    (int) (i * sirinaPolja),
-				    (int) (Igra.N * sirinaPolja),
+				    (int) (Igra.velikost * sirinaPolja),
 				    (int) (i * sirinaPolja)
 			);
 		}

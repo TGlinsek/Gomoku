@@ -1,5 +1,6 @@
 package logika;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -13,22 +14,56 @@ public class Igra {
 	
 	//public List<Vrsta> okoliskeVrste;
 	public Set<Vrsta> zmagovalneVrste;
-	public int velikost;
-	public static int N = 15;
-	
-	
-	public Igra() {
-		this(N);  // kli�e konstruktor s parametrom
-	}
-	
+	public static int velikost = 15;
+	public static int dolzinaVrste = 5;
+	public static final List<Vrsta> VRSTE = new LinkedList<Vrsta>();
+
 	
 	public Igra(int stranica) {
 		this.matrika = new Matrika(stranica);
-		this.igralecNaPotezi = Igralec.CRNI;  // baje �rni vedno za�ne
+		this.igralecNaPotezi = Igralec.CRNI;  // baje crni vedno zacne
 		this.trenutnoStanje = Stanje.V_TEKU;
 		this.velikost = matrika.vrniDimenzije();
+		nastaviVrste();
 	}
 	
+	public Igra() {
+		this(15);  // klice konstruktor s parametrom
+	}
+	
+	public Igra(Igra igra) {
+		Polje[][] mat = igra.matrika.pridobiMatriko();
+		this.velikost = matrika.vrniDimenzije();
+		this.matrika = new Matrika(velikost);
+		Polje[][] kopijaMat = this.matrika.pridobiMatriko();
+		for (int i = 0; i < velikost; i++) {
+			for (int j = 0; j < velikost; j++) {
+				kopijaMat[i][j] = mat[i][j];
+			}
+		}
+		this.igralecNaPotezi = igra.igralecNaPotezi;
+	}
+		
+	public void nastaviVrste() {
+		int[][] smer = {{1,0}, {0,1}, {1,1}, {1,-1}};
+		for (int x = 0; x < velikost; x++) {
+			for (int y = 0; y < velikost; y++) {
+				for (int[] s : smer) {
+					int dx = s[0];
+					int dy = s[1];
+					// če je skrajno polje terice še na plošči, jo dodamo med terice
+					if ((0 <= x + (dolzinaVrste-1) * dx) && (x + (dolzinaVrste-1) * dx < velikost) && 
+						(0 <= y + (dolzinaVrste-1) * dy) && (y + (dolzinaVrste-1) * dy < velikost)) {
+						Koordinati[] vrsta = new Koordinati[dolzinaVrste];
+						for (int k = 0; k < dolzinaVrste; k++) {
+							vrsta[k] = new Koordinati(x + k*dx, y + k*dy);
+						}
+						VRSTE.add(new Vrsta(vrsta));
+					}
+				}
+			}
+		}
+	}
 	
 	public boolean igraJePolna() {
 		return this.matrika.matrikaJePolna();
@@ -39,27 +74,70 @@ public class Igra {
 		return this.matrika.vrniClen(k);
 	}
 	
-	
-	public void spremeniStanjeIgre(Koordinati k) {
-		// if (zmagovalneVrste.size() != 0) {
-		if (matrika.imamoResitev(k).size() != 0) {
-			switch (matrika.vrniClen(k)) {
-				case CRNO: trenutnoStanje = Stanje.ZMAGA_CRNI;
-				case BELO: trenutnoStanje = Stanje.ZMAGA_BELI;
-				case PRAZNO: assert false; // tole nevem ce je potrebno, ker se if itak ne izpolni, ce je polje prazno. Ce umaknem, pa tezi
+	private Igralec cigavaVrsta(Vrsta t) {
+		int belih = 0;
+		int crnih = 0;
+		for (int k = 0; k < dolzinaVrste && (belih == 0 || crnih == 0); k++) {
+			switch (matrika.vrniClen(t.tabelaKoordinat[k])) {
+			case CRNO: crnih += 1; break;
+			case BELO: belih += 1; break;
+			case PRAZNO: break;
 			}
 		}
-		else if (matrika.matrikaJePolna()) {
-			trenutnoStanje = Stanje.NEODLOCENO;
-		}
-		else trenutnoStanje = Stanje.V_TEKU;
+		if (crnih == dolzinaVrste) { return Igralec.CRNI; }
+		else if (belih == dolzinaVrste) { return Igralec.BELI; }
+		else { return null; }
 	}
+	
+	public Vrsta zmagovalnaVrsta() {
+		for (Vrsta t : VRSTE) {
+			Igralec lastnik = cigavaVrsta(t);
+			if (lastnik != null) return t;
+		}
+		return null;
+	}
+	
+	public void spremeniStanje() {
+		// Ali imamo zmagovalca?
+		Vrsta t = zmagovalnaVrsta();
+		if (t != null) {
+			switch (matrika.vrniClen(t.tabelaKoordinat[0])) {
+			case CRNO: trenutnoStanje = Stanje.ZMAGA_CRNI;
+			case BELO: trenutnoStanje = Stanje.ZMAGA_BELI;
+			case PRAZNO: assert false;
+			}
+		}
+		// Ali imamo kakšno prazno polje?
+		// Če ga imamo, igre ni konec in je nekdo na potezi
+		for (int i = 0; i < velikost; i++) {
+			for (int j = 0; j < velikost; j++) {
+				if (matrika.vrniClen(new Koordinati(i,j)) == Polje.PRAZNO) trenutnoStanje = Stanje.V_TEKU;
+			}
+		}
+		// Polje je polno, rezultat je neodločen
+		trenutnoStanje = Stanje.NEODLOCENO;
+	}
+	
+//	public void spremeniStanjeIgre(Koordinati k) {
+//		// if (zmagovalneVrste.size() != 0) {
+//		if (matrika.imamoResitev(k).size() != 0) {
+//			switch (matrika.vrniClen(k)) {
+//				case CRNO: trenutnoStanje = Stanje.ZMAGA_CRNI;
+//				case BELO: trenutnoStanje = Stanje.ZMAGA_BELI;
+//				case PRAZNO: assert false; // tole nevem ce je potrebno, ker se if itak ne izpolni, ce je polje prazno. Ce umaknem, pa tezi
+//			}
+//		}
+//		else if (matrika.matrikaJePolna()) {
+//			trenutnoStanje = Stanje.NEODLOCENO;
+//		}
+//		else trenutnoStanje = Stanje.V_TEKU;
+//	}
 	
 	
 	public boolean igraj(Koordinati k) {  // metoda .igraj() vrne true, �e je poteza ustrezna, druga�e false
 		if (!matrika.dodajKamen(k, igralecNaPotezi.barvaPoteze())) return false;  // .dodajKamen() vrne true, �e je poteza bila ustrezna, druga�e false
-		zmagovalneVrste = this.resitve(k);
-		spremeniStanjeIgre(k);
+		//zmagovalneVrste = this.resitve(k);
+		//spremeniStanje();
 		igralecNaPotezi = igralecNaPotezi.pridobiNasprotnika();
 		return true;
 	}
@@ -70,7 +148,7 @@ public class Igra {
 	}
 	
 	
-	public Set<Vrsta> resitve(Koordinati k) {
-		return this.matrika.imamoResitev(k);
-	}
+//	public Set<Vrsta> resitve(Koordinati k) {
+//		return this.matrika.imamoResitev(k);
+//	}
 }

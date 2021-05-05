@@ -5,16 +5,22 @@ import java.util.Map;
 import java.util.List;
 
 import javax.swing.SwingWorker;
+
+import inteligenca.Inteligenca;
+import inteligenca.Minimax;
+
 import java.util.concurrent.TimeUnit;
 
 import logika.Igra;
 import logika.Igralec;
+import splosno.KdoIgra;
 import splosno.Koordinati;
 import tekstovni_vmesnik.VrstaIgralca;
 
 public class Vodja {	
 	
 	public static Map<Igralec, VrstaIgralca> vrstaIgralca;
+	public static Map<Igralec,KdoIgra> kdoIgra;
 	
 	public static Okno okno;
 	
@@ -31,6 +37,7 @@ public class Vodja {
 	
 	public static void igramo() {
 		okno.osveziGUI();
+		igra.spremeniStanje();
 		switch (igra.trenutnoStanje) {
 		case ZMAGA_CRNI: 
 		case ZMAGA_BELI: 
@@ -51,7 +58,7 @@ public class Vodja {
 	}
 	
 	
-	private static Random random = new Random();
+//	private static Random random = new Random();
 	
 //	public static void igrajRacunalnikovoPotezo() {
 //		List<Koordinati> moznePoteze = igra.poteze();
@@ -62,24 +69,27 @@ public class Vodja {
 //		igramo ();
 //	}
 	
+	public static Inteligenca racunalnikovaInteligenca = new Minimax(1);
+	
 	public static void igrajRacunalnikovoPotezo() {
 		Igra zacetkaIgra = igra;
 		SwingWorker<Koordinati, Void> worker = new SwingWorker<Koordinati, Void> () {
 			@Override
 			protected Koordinati doInBackground() {
-				try {TimeUnit.SECONDS.sleep(2);} catch (Exception e) {};
-				List<Koordinati> moznePoteze = igra.vrniVsaPraznaPolja();
-				int randomIndex = random.nextInt(moznePoteze.size());
-				return moznePoteze.get(randomIndex);
+				Koordinati poteza = racunalnikovaInteligenca.izberiPotezo(igra);
+				
+				try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
+				//List<Koordinati> moznePoteze = igra.vrniVsaPraznaPolja();
+				//int randomIndex = random.nextInt(moznePoteze.size());
+				return poteza;
 			}
 			@Override
 			protected void done () {
 				Koordinati poteza = null;
 				try {poteza = get();} catch (Exception e) {};
 				if (igra == zacetkaIgra) {
-					igra.matrika.dodajVrste(poteza);
+					//igra.matrika.dodajVrste(poteza);
 					igra.igraj(poteza);
-					
 					igramo();
 				}
 			}
@@ -89,7 +99,7 @@ public class Vodja {
 	
 	
 	public static void igrajClovekovoPotezo(Koordinati poteza) {
-		igra.matrika.dodajVrste(poteza);
+		//igra.matrika.dodajVrste(poteza);
 		if (igra.igraj(poteza)) clovekNaVrsti = false;
 		igramo();
 	}
