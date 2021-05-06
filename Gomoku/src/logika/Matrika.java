@@ -291,6 +291,9 @@ public class Matrika {
 
 	
 	private void preberiPraznaPolja () {
+		// pobrišemo seznam preden zaènemo polja dodajati
+		this.praznaPolja.clear();  // brez tega se na novo zapolnjena polja ne odstranjujejo in bi hipotetièno lahko raèunalnik izbral že zapolnjeno polje
+		
 		for (int i = 0; i < this.stranica; i++) {
 			for (int j = 0; j < this.stranica; j++) {
 				if (matrika[i][j] == Polje.PRAZNO) { 
