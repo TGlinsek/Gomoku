@@ -1,5 +1,6 @@
 package grafika;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -41,6 +42,11 @@ public class Okno extends JFrame implements ActionListener {
 	private JMenuItem igraClovekClovek;
 	private JMenuItem igraRacunalnikRacunalnik;
 	
+	private JMenuItem belaPlosca;
+	private JMenuItem crnaPlosca;
+	private JMenuItem modraPlosca;
+
+	
 	/**
 	 * KONSTRUKTOR - ustvari novo glavno okno in priƒçni igrati igro.
 	 */
@@ -71,6 +77,24 @@ public class Okno extends JFrame implements ActionListener {
 		igraRacunalnikRacunalnik = new JMenuItem("JAZ proti SEBI");
 		igra_menu.add(igraRacunalnikRacunalnik);
 		igraRacunalnikRacunalnik.addActionListener(this);
+		
+
+		// menu2
+		JMenu igra_menu2 = new JMenu("BARVA PLOä»E");
+		menu_bar.add(igra_menu2);
+		
+		belaPlosca = new JMenuItem("BELA");
+		igra_menu2.add(belaPlosca);
+		belaPlosca.addActionListener(this);
+		
+		crnaPlosca = new JMenuItem("»RNA");
+		igra_menu2.add(crnaPlosca);
+		crnaPlosca.addActionListener(this);
+		
+		modraPlosca = new JMenuItem("MODRA");
+		igra_menu2.add(modraPlosca);
+		modraPlosca.addActionListener(this);
+		
 		
 		// igralno polje oz. platno
 		platno = new Platno();
@@ -129,6 +153,12 @@ public class Okno extends JFrame implements ActionListener {
 			Vodja.vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.R);
 			Vodja.vrstaIgralca.put(Igralec.BELI, VrstaIgralca.R);
 			Vodja.igramoNovoIgro();
+		} else if (e.getSource() == belaPlosca) {
+			platno.spremeniOzadje(Color.WHITE);
+		} else if (e.getSource() == crnaPlosca) {
+			platno.spremeniOzadje(Color.BLACK);
+		} else if (e.getSource() == modraPlosca) {
+			platno.spremeniOzadje(Color.BLUE);
 		}
 	}
 	

@@ -52,6 +52,7 @@ public class Igra {
 			}
 		}
 		this.igralecNaPotezi = igra.igralecNaPotezi;
+		this.trenutnoStanje = igra.trenutnoStanje;
 	}
 		
 	public void nastaviVrste() {  // vse vrste v igri
@@ -111,6 +112,7 @@ public class Igra {
 		// Ali imamo zmagovalca?
 		Vrsta t = zmagovalnaVrsta();
 		if (t != null) {
+			// System.out.println(matrika.vrniClen(t.tabelaKoordinat[0]));
 			switch (matrika.vrniClen(t.tabelaKoordinat[0])) {
 			case CRNO: trenutnoStanje = Stanje.ZMAGA_CRNI;
 			case BELO: trenutnoStanje = Stanje.ZMAGA_BELI;

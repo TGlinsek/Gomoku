@@ -38,11 +38,13 @@ public class Platno extends JPanel implements MouseListener {
 	
 	Stroke debelinaRoba;
 	
+	Color barvaOzadja = Color.WHITE;
+	
 	private static Map<Polje, Color> poljuPrirediBarvo;
 
 	
 	public Platno() {
-		setBackground(Color.WHITE);
+		setBackground(barvaOzadja);
 		this.addMouseListener(this);
 		
 		// sirinaPolja = sirinaPolja();  // na tem mestu je igra še null, zato ne moremo pridobiti njene velikosti
@@ -56,6 +58,10 @@ public class Platno extends JPanel implements MouseListener {
 		poljuPrirediBarvo = new EnumMap<Polje, Color>(Polje.class);
 		poljuPrirediBarvo.put(Polje.BELO, Color.WHITE);
 		poljuPrirediBarvo.put(Polje.CRNO, Color.BLACK);
+	}
+	
+	public void spremeniOzadje(Color barva) {
+		setBackground(barva);
 	}
 	
 	
@@ -140,6 +146,7 @@ public class Platno extends JPanel implements MouseListener {
 //				}
 //			}
 //		}
+		
 		Vrsta vrsta = null;
 		if (Vodja.igra != null) {vrsta = Vodja.igra.zmagovalnaVrsta();}
 		if (vrsta != null) {
@@ -148,6 +155,7 @@ public class Platno extends JPanel implements MouseListener {
 				pobarvajOzadjePolja(g2, k);
 			}
 		}
+		
 	}
 	
 	
