@@ -49,6 +49,9 @@ public class Minimax extends Inteligenca {
 					|| jaz != igra.igralecNaPotezi && ocena < najboljsaPoteza.ocena) // ali pa ce nisem na potezi jaz in je najmanjsa, jo vzemi 
 				najboljsaPoteza = new OcenjenaPoteza (p, ocena);		
 		}
+		if (najboljsaPoteza == null) {
+			throw new java.lang.RuntimeException("najboljsaPoteza ne more biti null!");
+		}
 		return najboljsaPoteza;
 	}
 }

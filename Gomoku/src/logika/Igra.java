@@ -19,6 +19,9 @@ public class Igra {
 	public static int dolzinaVrste = 5;
 	public static final List<Vrsta> VRSTE = new LinkedList<Vrsta>();
 	
+	public Koordinati zadnjaIgranaPoteza;  // zadnja poteza igralca, ki je bil nazadnje na vrsti
+	// to definiramo samo zato, da se vsaka nova poteza obarva
+	
 	
 	public Igra(int stranica) {
 		this.matrika = new Matrika(stranica);
@@ -153,6 +156,7 @@ public class Igra {
 		if (!matrika.dodajKamen(k, igralecNaPotezi.barvaPoteze())) return false;  // .dodajKamen() vrne true, �e je poteza bila ustrezna, druga�e false
 		//zmagovalneVrste = this.resitve(k);
 		//spremeniStanje();
+		zadnjaIgranaPoteza = k;
 		igralecNaPotezi = igralecNaPotezi.pridobiNasprotnika();
 		return true;
 	}

@@ -35,6 +35,7 @@ public class Platno extends JPanel implements MouseListener {
 	Color barvaRoba;  // rob kamna
 	Color barvaMreze;
 	Color barvaPolja;
+	Color barvaNajnovejsegaPolja;
 	
 	Stroke debelinaRoba;
 	
@@ -52,6 +53,8 @@ public class Platno extends JPanel implements MouseListener {
 		barvaRoba = Color.BLACK;
 		barvaMreze = Color.BLACK;
 		barvaPolja = new Color(255, 255, 196);
+		
+		barvaNajnovejsegaPolja = new Color(255, 150, 150, 127);
 		
 		debelinaRoba = new BasicStroke(3);
 		
@@ -158,6 +161,14 @@ public class Platno extends JPanel implements MouseListener {
 		
 	}
 	
+	private void pobarvajNajnovejsoPotezo(Graphics2D g2) {
+		if (Vodja.igra.zadnjaIgranaPoteza != null) {
+			g2.setColor(barvaNajnovejsegaPolja);
+			pobarvajOzadjePolja(g2, Vodja.igra.zadnjaIgranaPoteza);
+		}
+		
+	}
+	
 	
 	private void narisiMrezo(Graphics2D g2) {
 		g2.setColor(barvaMreze);
@@ -217,6 +228,8 @@ public class Platno extends JPanel implements MouseListener {
 		Graphics2D g2 = (Graphics2D) g;
 
 		pobarvajZmagovalnoVrsto(g2);
+		
+		pobarvajNajnovejsoPotezo(g2);
 
 		narisiMrezo(g2);
 		
@@ -228,6 +241,7 @@ public class Platno extends JPanel implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		/*
 		if (Vodja.igra == null) {
 			return;
 		}
@@ -249,11 +263,33 @@ public class Platno extends JPanel implements MouseListener {
 			}
 		}
 		repaint();
+		*/
 	}
 	
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if (Vodja.igra == null) {
+			return;
+		}
+		if (Vodja.clovekNaVrsti) {
+			int x = e.getX();
+			int y = e.getY();
+			int w = (int) (sirinaPolja);
+			int i = x / w;
+			double di = (x % w) / sirinaPolja;
+			int j = y / w;
+			double dj = (y % w) / sirinaPolja;
+			if (
+					0 <= i && i < Vodja.igra.velikost &&
+					0.5 * LINE_WIDTH < di && di < 1.0 - 0.5 * LINE_WIDTH &&
+					0 <= j && j < Vodja.igra.velikost &&
+					0.5 * LINE_WIDTH < dj && dj < 1.0 - 0.5 * LINE_WIDTH
+			) {
+				Vodja.igrajClovekovoPotezo (new Koordinati(i, j));
+			}
+		}
+		repaint();
 	}
 	
 	

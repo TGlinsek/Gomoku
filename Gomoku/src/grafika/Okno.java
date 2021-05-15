@@ -158,7 +158,7 @@ public class Okno extends JFrame implements ActionListener {
 		} else if (e.getSource() == crnaPlosca) {
 			platno.spremeniOzadje(Color.BLACK);
 		} else if (e.getSource() == modraPlosca) {
-			platno.spremeniOzadje(Color.BLUE);
+			platno.spremeniOzadje(new Color(127, 127, 255));  // modro-vijolièna barva
 		}
 	}
 	

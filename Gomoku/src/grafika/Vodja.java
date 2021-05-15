@@ -31,7 +31,7 @@ public class Vodja {
 	
 	
 	public static void igramoNovoIgro() {
-		igra = new Igra(10);
+		igra = new Igra(10);  // nastavi velikost (brez parametra za default)
 		okno.nastaviVelikostPoljVPlatnu();
 		igramo();
 	}
@@ -98,7 +98,9 @@ public class Vodja {
 				Koordinati poteza = racunalnikovaInteligenca.izberiPotezo(igra);
 				//Koordinati poteza = racunalnikovaPoteza(igra);  // za�asna metoda
 				
-				try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
+				// try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
+				try {TimeUnit.MILLISECONDS.sleep(500);} catch (Exception e) {};
+				
 				// System.out.println(poteza);
 				return poteza;
 			}
