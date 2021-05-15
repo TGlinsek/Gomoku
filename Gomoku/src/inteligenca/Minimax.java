@@ -7,8 +7,6 @@ import logika.Igralec;
 
 import splosno.Koordinati;
 
-import inteligenca.Oceni;
-
 public class Minimax extends Inteligenca {
 	
 	private static final int ZMAGA = 100; // nekaj velikega

@@ -114,8 +114,8 @@ public class Igra {
 		if (t != null) {
 			// System.out.println(matrika.vrniClen(t.tabelaKoordinat[0]));
 			switch (matrika.vrniClen(t.tabelaKoordinat[0])) {
-			case CRNO: trenutnoStanje = Stanje.ZMAGA_CRNI;
-			case BELO: trenutnoStanje = Stanje.ZMAGA_BELI;
+			case CRNO: {trenutnoStanje = Stanje.ZMAGA_CRNI; return;}
+			case BELO: {trenutnoStanje = Stanje.ZMAGA_BELI; return;}
 			case PRAZNO: assert false;
 			}
 		}
@@ -123,8 +123,10 @@ public class Igra {
 		// Če ga imamo, igre ni konec in je nekdo na potezi
 		for (int i = 0; i < velikost; i++) {
 			for (int j = 0; j < velikost; j++) {
-				if (matrika.vrniClen(new Koordinati(i,j)) == Polje.PRAZNO) trenutnoStanje = Stanje.V_TEKU;
-				return;
+				if (matrika.vrniClen(new Koordinati(i,j)) == Polje.PRAZNO) {
+					trenutnoStanje = Stanje.V_TEKU;
+				    return;
+				}
 			}
 		}
 		// Polje je polno, rezultat je neodločen

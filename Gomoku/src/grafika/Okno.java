@@ -80,14 +80,14 @@ public class Okno extends JFrame implements ActionListener {
 		
 
 		// menu2
-		JMenu igra_menu2 = new JMenu("BARVA PLOä»E");
+		JMenu igra_menu2 = new JMenu("BARVA PLOÔøΩÔøΩE");
 		menu_bar.add(igra_menu2);
 		
 		belaPlosca = new JMenuItem("BELA");
 		igra_menu2.add(belaPlosca);
 		belaPlosca.addActionListener(this);
 		
-		crnaPlosca = new JMenuItem("»RNA");
+		crnaPlosca = new JMenuItem("ÔøΩRNA");
 		igra_menu2.add(crnaPlosca);
 		crnaPlosca.addActionListener(this);
 		
@@ -168,6 +168,7 @@ public class Okno extends JFrame implements ActionListener {
 			status.setText("Igra ne poteka");
 		}
 		else {
+			Vodja.igra.spremeniStanje();
 			switch(Vodja.igra.trenutnoStanje) {
 			case NEODLOCENO: status.setText("Neodloƒçeno!"); break;
 			case V_TEKU:

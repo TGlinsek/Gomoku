@@ -47,7 +47,7 @@ public class Platno extends JPanel implements MouseListener {
 		setBackground(barvaOzadja);
 		this.addMouseListener(this);
 		
-		// sirinaPolja = sirinaPolja();  // na tem mestu je igra še null, zato ne moremo pridobiti njene velikosti
+		// sirinaPolja = sirinaPolja();  // na tem mestu je igra ï¿½e null, zato ne moremo pridobiti njene velikosti
 		
 		barvaRoba = Color.BLACK;
 		barvaMreze = Color.BLACK;
@@ -67,7 +67,7 @@ public class Platno extends JPanel implements MouseListener {
 	
 	@Override
 	public Dimension getPreferredSize() {  // privzete dimenzije?
-		return new Dimension(400, 400);
+		return new Dimension(800, 800);
 	}
 	
 	
@@ -162,7 +162,7 @@ public class Platno extends JPanel implements MouseListener {
 	private void narisiMrezo(Graphics2D g2) {
 		g2.setColor(barvaMreze);
 		g2.setStroke(new BasicStroke((float) (sirinaPolja * LINE_WIDTH)));
-		for (int i = 1; i < Vodja.igra.velikost; i++) {
+		for (int i = 0; i < Vodja.igra.velikost+1; i++) {
 			// navpiï¿½ne ï¿½rte
 			g2.drawLine(
 					(int) (i * sirinaPolja),
@@ -222,7 +222,7 @@ public class Platno extends JPanel implements MouseListener {
 		
 		narisiKamne(g2);
 		
-		// repaint();  // to samo klièe paintComponent
+		// repaint();  // to samo kliï¿½e paintComponent
 	}
 	
 	

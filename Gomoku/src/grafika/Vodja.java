@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
+import inteligenca.AlfaBeta;
 import inteligenca.Inteligenca;
 import inteligenca.Minimax;
 
@@ -30,7 +31,7 @@ public class Vodja {
 	
 	
 	public static void igramoNovoIgro() {
-		igra = new Igra();
+		igra = new Igra(10);
 		okno.nastaviVelikostPoljVPlatnu();
 		igramo();
 	}
@@ -42,13 +43,8 @@ public class Vodja {
 		
 		switch (igra.trenutnoStanje) {
 		case ZMAGA_CRNI: 
-			System.out.println("Zmagal je èrni!");
-			break;
 		case ZMAGA_BELI:
-			System.out.println("Zmagal je beli!");
-			break;
 		case NEODLOCENO:
-			System.out.println("Noben ni zmagal!");
 			return; // odhajamo iz metode igramo
 		case V_TEKU: 
 			Igralec igralec = igra.igralecNaPotezi;
@@ -77,19 +73,19 @@ public class Vodja {
 //	}
 	
 	
-	public static Inteligenca racunalnikovaInteligenca = new Minimax(2);
+	public static Inteligenca racunalnikovaInteligenca = new AlfaBeta(3);
 	
 	
-	private static Random random = new Random ();  // le zaradi metode racunalnikovaPoteza
-	
-	public static Koordinati racunalnikovaPoteza(Igra igra) {  // zaèasna metoda za testiranje grafike
-		List<Koordinati> moznePoteze = igra.vrniVsaPraznaPolja();
-		int randomIndex = random.nextInt(moznePoteze.size());
-		Koordinati poteza = moznePoteze.get(randomIndex);
-		if (igra.igraj(poteza)) return poteza;
-		assert false;
-		return null;
-	}
+//	private static Random random = new Random ();  // le zaradi metode racunalnikovaPoteza
+//	
+//	public static Koordinati racunalnikovaPoteza(Igra igra) {  // zaï¿½asna metoda za testiranje grafike
+//		List<Koordinati> moznePoteze = igra.vrniVsaPraznaPolja();
+//		int randomIndex = random.nextInt(moznePoteze.size());
+//		Koordinati poteza = moznePoteze.get(randomIndex);
+//		if (igra.igraj(poteza)) return poteza;
+//		assert false;
+//		return null;
+//	}
 	
 	
 	
@@ -100,7 +96,7 @@ public class Vodja {
 			@Override
 			protected Koordinati doInBackground() {
 				Koordinati poteza = racunalnikovaInteligenca.izberiPotezo(igra);
-				//Koordinati poteza = racunalnikovaPoteza(igra);  // zaèasna metoda
+				//Koordinati poteza = racunalnikovaPoteza(igra);  // zaï¿½asna metoda
 				
 				try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
 				// System.out.println(poteza);
@@ -112,7 +108,6 @@ public class Vodja {
 				try {poteza = get();} catch (Exception e) {return;};
 				// System.out.println(poteza);
 				if (igra == zacetkaIgra) {
-					//igra.matrika.dodajVrste(poteza);
 					igra.igraj(poteza);
 					igramo();
 				}
@@ -123,7 +118,6 @@ public class Vodja {
 	
 	
 	public static void igrajClovekovoPotezo(Koordinati poteza) {
-		//igra.matrika.dodajVrste(poteza);
 		if (igra.igraj(poteza)) clovekNaVrsti = false;
 		igramo();
 	}
