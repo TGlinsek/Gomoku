@@ -31,7 +31,7 @@ public class Vodja {
 	
 	
 	public static void igramoNovoIgro() {
-		igra = new Igra(10);  // nastavi velikost (brez parametra za default)
+		igra = new Igra(19);  // nastavi velikost (brez parametra za default)
 		okno.nastaviVelikostPoljVPlatnu();
 		igramo();
 	}
@@ -39,7 +39,8 @@ public class Vodja {
 	
 	public static void igramo() {
 		okno.osveziGUI();
-		igra.spremeniStanje();
+		// igra.spremeniStanjeIgre(igra.zadnjaIgranaPoteza);  // ne dela, ker lahko da je na tem mestu igra.zadnjaIgranaPoteza še null
+		// igra.spremeniStanjeIgre();
 		
 		switch (igra.trenutnoStanje) {
 		case ZMAGA_CRNI: 
@@ -73,8 +74,8 @@ public class Vodja {
 //	}
 	
 	
-	public static Inteligenca racunalnikovaInteligenca = new AlfaBeta(3);
-	
+	// public static Inteligenca racunalnikovaInteligenca = new AlfaBeta(1);
+	public static Inteligenca racunalnikovaInteligenca = new Minimax(1);
 	
 //	private static Random random = new Random ();  // le zaradi metode racunalnikovaPoteza
 //	

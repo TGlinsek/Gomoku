@@ -31,26 +31,35 @@ public class Minimax extends Inteligenca {
 	public OcenjenaPoteza minimax(Igra igra, int globina, Igralec jaz) {
 		OcenjenaPoteza najboljsaPoteza = null;
 		List<Koordinati> moznePoteze = igra.vrniVsaPraznaPolja();
+		
+		MatrikaVrednosti matrikaVrednosti = Oceni.izIgrePridobiMatrikoVrednosti(igra.matrika, jaz);  // evaluira vsa polja
 		for (Koordinati p: moznePoteze) {
 			Igra kopijaIgre = new Igra(igra);
 			kopijaIgre.igraj (p);
-			int ocena;
-			kopijaIgre.spremeniStanje();
+			Vrednost ocena;
+			// kopijaIgre.spremeniStanjeIgre();
 			switch (kopijaIgre.trenutnoStanje) {
-			case ZMAGA_CRNI: ocena = (jaz == Igralec.CRNI ? ZMAGA : PORAZ); break;
-			case ZMAGA_BELI: ocena = (jaz == Igralec.BELI ? ZMAGA : PORAZ); break;
-			case NEODLOCENO: ocena = NEODLOC; break;
+			case ZMAGA_CRNI: ocena = new Vrednost(jaz == Igralec.CRNI ? ZMAGA : PORAZ); break;
+			case ZMAGA_BELI: ocena = new Vrednost(jaz == Igralec.BELI ? ZMAGA : PORAZ); break;
+			case NEODLOCENO: ocena = new Vrednost(NEODLOC); break;
 			default:
-				if (globina == 1) ocena = Oceni.oceni(kopijaIgre, jaz); // dno rekurzije - oceni pozicijo
-				else ocena = minimax(kopijaIgre, globina-1, jaz).ocena;	// nadaljuj rekurzijo z globina-1
+				// if (globina == 1) ocena = Oceni.oceni(kopijaIgre, jaz); // dno rekurzije - oceni pozicijo
+				if (globina == 1) ocena = matrikaVrednosti.vrniClen(p); // dno rekurzije - oceni pozicijo
+				else ocena = new Vrednost(minimax(kopijaIgre, globina-1, jaz).ocena);	// nadaljuj rekurzijo z globina-1
 			}
+			
+			if (ocena == null) continue;  // preskoèi vrednosti null
 			if (najboljsaPoteza == null 
-					|| jaz == igra.igralecNaPotezi && ocena > najboljsaPoteza.ocena // ce sem na potezi jaz in je ta ocena najboljsa do zdaj jo naredi za najboljso
-					|| jaz != igra.igralecNaPotezi && ocena < najboljsaPoteza.ocena) // ali pa ce nisem na potezi jaz in je najmanjsa, jo vzemi 
-				najboljsaPoteza = new OcenjenaPoteza (p, ocena);		
+					|| jaz == igra.igralecNaPotezi && ocena.vrednost > najboljsaPoteza.ocena // ce sem na potezi jaz in je ta ocena najboljsa do zdaj jo naredi za najboljso
+					|| jaz != igra.igralecNaPotezi && ocena.vrednost > najboljsaPoteza.ocena // ali pa ce nisem na potezi jaz in je najmanjsa, jo vzemi 
+			)
+				najboljsaPoteza = new OcenjenaPoteza (p, ocena.vrednost);	
 		}
 		if (najboljsaPoteza == null) {
 			throw new java.lang.RuntimeException("najboljsaPoteza ne more biti null!");
+		}
+		if (najboljsaPoteza.poteza == null) {
+			throw new java.lang.RuntimeException("Poteza je null!");
 		}
 		return najboljsaPoteza;
 	}

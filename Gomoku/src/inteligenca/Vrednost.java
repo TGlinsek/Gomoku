@@ -1,15 +1,10 @@
 package inteligenca;
 
-import splosno.Koordinati;
-
-public class OcenjenaPoteza {
+public class Vrednost {
+	public double vrednost;
 	
-	Koordinati poteza;
-	double ocena;
-	
-	public OcenjenaPoteza (Koordinati poteza, double ocena) {
-		this.poteza = poteza;
-		this.ocena = ocena;
+	public Vrednost(double vrednost) {
+		this.vrednost = vrednost;
 	}
 	
 	
@@ -26,14 +21,13 @@ public class OcenjenaPoteza {
 	
 	@Override
 	public String toString() {
-		return vrniPrvihNZnakov(String.valueOf(ocena), 4);
+		return vrniPrvihNZnakov(String.valueOf(vrednost), 4);
 	}
 	
 	
-	public int compareTo (OcenjenaPoteza op) {
-		if (this.ocena < op.ocena) return -1;
-		else if (this.ocena > op.ocena) return 1;
+	public int compareTo (Vrednost vr) {
+		if (this.vrednost < vr.vrednost) return -1;
+		else if (this.vrednost > vr.vrednost) return 1;
 		else return 0;
 	}
-
 }

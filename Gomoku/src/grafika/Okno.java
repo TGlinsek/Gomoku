@@ -168,7 +168,7 @@ public class Okno extends JFrame implements ActionListener {
 			status.setText("Igra ne poteka");
 		}
 		else {
-			Vodja.igra.spremeniStanje();
+			// Vodja.igra.spremeniStanjeIgre(Vodja.igra.zadnjaIgranaPoteza);
 			switch(Vodja.igra.trenutnoStanje) {
 			case NEODLOCENO: status.setText("Neodločeno!"); break;
 			case V_TEKU:

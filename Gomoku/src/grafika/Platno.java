@@ -9,7 +9,9 @@ import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.EnumMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import javax.swing.JPanel;
@@ -136,6 +138,20 @@ public class Platno extends JPanel implements MouseListener {
 	}
 	
 	
+	// https://stackoverflow.com/questions/124671/picking-a-random-element-from-a-set
+	private Vrsta vrniNakljucniElement(Set<Vrsta> mnozica) {
+		if (mnozica.size() == 0) return null;
+		Random rand = new Random();
+		
+		int index = rand.nextInt(mnozica.size());
+		Iterator<Vrsta> iter = mnozica.iterator();
+		for (int i = 0; i < index; i++) {
+		    iter.next();
+		}
+		return iter.next();
+	}
+	
+	
 	private void pobarvajZmagovalnoVrsto(Graphics2D g2) {
 		// pobarvamo ozadje zmagovalne vrste
 //		Set<Vrsta> vrste = null;
@@ -151,7 +167,8 @@ public class Platno extends JPanel implements MouseListener {
 //		}
 		
 		Vrsta vrsta = null;
-		if (Vodja.igra != null) {vrsta = Vodja.igra.zmagovalnaVrsta();}
+		// if (Vodja.igra != null) {vrsta = Vodja.igra.zmagovalnaVrsta();}
+		if (Vodja.igra != null) {vrsta = vrniNakljucniElement(Vodja.igra.zmagovalneVrste);}
 		if (vrsta != null) {
 			g2.setColor(barvaPolja);
 			for (Koordinati k : vrsta.tabelaKoordinat) {

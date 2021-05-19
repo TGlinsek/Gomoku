@@ -11,6 +11,8 @@ import splosno.Koordinati;
 
 public class Matrika {
 	
+	private final int kolikoVVrsto;
+	
 	private Polje[][] matrika;
 	private int stranica;
 	private List<Koordinati> praznaPolja;  // zato, da se bo raï¿½unalnik lahko odloï¿½al med moï¿½nimi potezami
@@ -23,6 +25,7 @@ public class Matrika {
 		//this.okoliskeVrste = new LinkedList<Vrsta>();
 		izprazniMatriko();
 		preberiPraznaPolja();
+		kolikoVVrsto = 5;
 	}
 	
 	
@@ -59,6 +62,9 @@ public class Matrika {
 	
 	
 	public Polje vrniClen(Koordinati k) {
+		if (!koordinateSoVMatriki(k)) {
+			return null;
+		}
 		return this.matrika[k.getY()][k.getX()];
 	}
 	
@@ -87,7 +93,7 @@ public class Matrika {
 			}
 		}
 		return !obstajaPraznoPolje;
-	}
+	}  // lahko bi tudi samo preverili, ali je praznaPolja prazen seznam
 	
 //	public Set<Vrsta> dodajVrste(Koordinati koordinati) {
 //		Set<Vrsta> okoliskeVrste = new HashSet<Vrsta>();
@@ -288,6 +294,51 @@ public class Matrika {
 //	}
 	
 	
+	private boolean koordinateSoVMatriki(Koordinati k) {
+		return k.getX() >= 0 &&
+				k.getX() < this.stranica &&
+				k.getY() >= 0 &&
+				k.getY() < this.stranica;
+	}
+	
+	
+	// vrne množico vseh vrst, ki so 5 v vrsto, so od igralca p in vsebujejo koordinato k
+	public Set<Vrsta> vrniResitev (Igralec p, Koordinati k) {  // koordinate, kamor smo nazadnje postavili figuro
+		Set<Vrsta> vseResitve = new HashSet<Vrsta>();
+		for (Koordinati l : Vrsta.smeri.values()) {
+			Polje[] tabela = new Polje[2 * kolikoVVrsto - 1];  // tabela dolžine 11
+			for (int odmik = -kolikoVVrsto + 1; odmik <= kolikoVVrsto - 1; odmik++) {
+				// Koordinati prestavljeneKoordinate = k.pristejVektor(l.pomnozi(odmik));
+				Koordinati prestavljeneKoordinate = new Koordinati(k.getX() + odmik * l.getX(), k.getY() + odmik * l.getY());
+				if (!this.koordinateSoVMatriki(prestavljeneKoordinate)) {
+					tabela[odmik + kolikoVVrsto - 1] = Polje.PRAZNO;
+					continue;
+				}
+				tabela[odmik + kolikoVVrsto - 1] = this.vrniClen(prestavljeneKoordinate);
+			}
+			
+			// zdaj poišèi morebitno (povezano) podzaporedje dolžine 5
+			int stevec = 0;
+			for (int i = -kolikoVVrsto + 1; i <= kolikoVVrsto - 1; i++) {
+				Polje polje = tabela[i + kolikoVVrsto - 1];
+				if (polje == p.barvaPoteze()) {  // èe je tam kamen, ki pripada igralèevim kamnom
+					stevec += 1;
+				}
+				else {
+					stevec = 0;  // resetiraj nazaj na 0
+				}
+				
+				if (stevec == kolikoVVrsto) {
+					vseResitve.add(
+						Vrsta.vrniVrsto(k, l, i - kolikoVVrsto + 1, i)  // -4 zato, ker tako dobimo vrsto dolžine 5
+					);
+					break;
+				}
+				// TODO: nared še za vrste dolžine 6, 7, ...
+			}
+		}
+		return vseResitve;
+	}
 
 	
 	private void preberiPraznaPolja () {
