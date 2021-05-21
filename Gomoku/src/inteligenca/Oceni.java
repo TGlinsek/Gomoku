@@ -71,7 +71,7 @@ public class Oceni {
 	}
 	
 	
-	private static MatrikaOsmericVrednosti izIgrePridobiMatrikoCetveric(Matrika matrika, Igralec jaz) {
+	private static MatrikaOsmericVrednosti izIgrePridobiMatrikoOsmeric(Matrika matrika, Igralec jaz) {
 		// recimo, da sem bel in da sem na vrsti in da maksimiziram attack
 		
 		Polje mojePolje;
@@ -200,6 +200,7 @@ public class Oceni {
 							ocenaPoljaZaVodoravnoSmerAttack = 0;  // slaba ocena, saj ni možno dobiti peterice
 						} else {
 							double prviKandidat;  // edini kandidat, ki upošteva še nasprotnikove kamne (torej, koliko smo omejeni)
+
 							if (razdaljaOdNasprotnikovih == 1) prviKandidat = povezanaDolzina - 1;  // èe smo tik ob nasprotniku, nam zaseda veliko prostora, zato bo ocena nizka
 							else {
 								if (razdaljaOdNasprotnikovih >= povezanaDolzina - 1) prviKandidat = povezanaDolzina - 0.05;  // èe nasprotnika ni v bližini
@@ -207,6 +208,8 @@ public class Oceni {
 									prviKandidat = povezanaDolzina - 0.05*(povezanaDolzina - razdaljaOdNasprotnikovih);  // za razdaljaOdNasprotnikovih == povezanaDolzina - 1 se oba primera ujemata
 								}
 							}
+							// prviKandidat = boljsiMax((povezanaDolzina >= 4 ? 4 : 0), prviKandidat);
+							prviKandidat = boljsiMax(((povezanaLevaDolzina + povezanaDolzina >= 4 && povezanaDesnaDolzina + povezanaDolzina >= 4) ? 4 : 0), prviKandidat);  // tole ga naj bi naredilo malo bolj napadalnega
 							
 							
 							double cetrtiKandidat = 0;  // èe imamo situacijo npr. b_bxb_b ali pa bb_bx_bb ali bbb_x_bbb, kjer je x poteza, ki bi jo v tej rundi naredili, potem smo si zagotovili zmago, zato damo oceno 4
@@ -214,7 +217,7 @@ public class Oceni {
 									povezanaLevaOdmik == 1 && 
 									(povezanaLevaDolzina + povezanaDolzina) >= 4 &&
 									(povezanaDesnaDolzina + povezanaDolzina) >= 4
-								) cetrtiKandidat = 4;
+								) cetrtiKandidat = 3.91;  // malo zmanjšal (iz 4), samo zato, ker obstaja veèja možnost, da nasprotnik tega ne opazi
 							
 							// ocenaPoljaZaVodoravnoSmerAttack = Math.max(Math.max(Math.max(prviKandidat, drugiKandidat), tretjiKandidat), cetrtiKandidat);
 							// ocenaPoljaZaVodoravnoSmerAttack = prviKandidat;
@@ -352,8 +355,8 @@ public class Oceni {
 				}
 			}
 		}
-		// System.out.println(novaMatrika);
-		// System.out.println(jaz);
+		System.out.println(novaMatrika);
+		System.out.println(jaz);
 		return novaMatrika;  // vsak èlen te matrike je seznam z 8 elementi: 4 smeri, 2 naèina (attack, defense)	
 	}
 	
@@ -389,15 +392,29 @@ public class Oceni {
 		} else {
 			throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
 		}
+		if (maks >= 2.95 && drugiMaks >= 2.95) return boljsiMax(boljsiMax(drugiMaks, maks), 3.55);  // èe imamo:
+		/*
+		   _
+		   _
+		   è
+		   è
+		 ___èè__
+		   _
+		   _
+		  
+		 Potem bi lahko èrn dal v to križišèe in si tako že zagotovil zmago
+		 
+		 Zato nastavimo vrednost na malo veè kot 3.5 (ne more biti bolje kot 4.0, saj 4.0 pomeni, da bo nasprotnik zmagal èez eno rundo - to pa je premalo rund, da bi lahko taèas mi zmagali)
+		 */
 		return boljsiMax(drugiMaks, maks);
 	}
 	
 	
-	private static MatrikaVrednosti izMatrikeCetvericPridobiMatrikoVrednosti(MatrikaOsmericVrednosti matrikaCetveric) {
-		Vrednost[][][] matrika = matrikaCetveric.pridobiMatriko();
-		MatrikaVrednosti novaMatrika = new MatrikaVrednosti(matrikaCetveric.vrniDimenzije());
-		for (int i = 0; i < matrikaCetveric.vrniDimenzije(); i++) {
-			for (int j = 0; j < matrikaCetveric.vrniDimenzije(); j++) {
+	private static MatrikaVrednosti izMatrikeOsmericPridobiMatrikoVrednosti(MatrikaOsmericVrednosti matrikaOsmeric) {
+		Vrednost[][][] matrika = matrikaOsmeric.pridobiMatriko();
+		MatrikaVrednosti novaMatrika = new MatrikaVrednosti(matrikaOsmeric.vrniDimenzije());
+		for (int i = 0; i < matrikaOsmeric.vrniDimenzije(); i++) {
+			for (int j = 0; j < matrikaOsmeric.vrniDimenzije(); j++) {
 				Vrednost WEattack = matrika[i][j][0];
 				Vrednost NSattack = matrika[i][j][1];
 				Vrednost SEattack = matrika[i][j][2];
@@ -428,12 +445,12 @@ public class Oceni {
 				);
 			}
 		}
-		// System.out.println(novaMatrika);
+		System.out.println(novaMatrika);
 		return novaMatrika;
 	}
 	
 	
 	public static MatrikaVrednosti izIgrePridobiMatrikoVrednosti(Matrika matrika, Igralec jaz) {
-		return izMatrikeCetvericPridobiMatrikoVrednosti(izIgrePridobiMatrikoCetveric(matrika, jaz));
+		return izMatrikeOsmericPridobiMatrikoVrednosti(izIgrePridobiMatrikoOsmeric(matrika, jaz));
 	}
 }

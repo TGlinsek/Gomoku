@@ -50,6 +50,7 @@ public class Vodja {
 		case V_TEKU: 
 			Igralec igralec = igra.igralecNaPotezi;
 			VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
+			clovekNaVrsti = false;  // èe tega ne bi bilo, bi lahko uporabnik "prenesel" potezo iz enega naèina igre v drugega, kar pa se ne sme zgoditi
 			switch (vrstaNaPotezi) {
 			case C: 
 				clovekNaVrsti = true;
@@ -100,7 +101,7 @@ public class Vodja {
 				//Koordinati poteza = racunalnikovaPoteza(igra);  // zaï¿½asna metoda
 				
 				// try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
-				try {TimeUnit.MILLISECONDS.sleep(500);} catch (Exception e) {};
+				try {TimeUnit.MILLISECONDS.sleep(750);} catch (Exception e) {};
 				
 				// System.out.println(poteza);
 				return poteza;
