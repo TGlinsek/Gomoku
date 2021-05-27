@@ -6,9 +6,7 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
-import inteligenca.AlfaBeta;
 import inteligenca.Inteligenca;
-import inteligenca.Minimax;
 
 import java.util.concurrent.TimeUnit;
 
@@ -63,32 +61,7 @@ public class Vodja {
 	}
 	
 	
-//	private static Random random = new Random();
-	
-//	public static void igrajRacunalnikovoPotezo() {
-//		List<Koordinati> moznePoteze = igra.poteze();
-//		try {TimeUnit.SECONDS.sleep(2);} catch (Exception e) {};
-//		int randomIndex = random.nextInt(moznePoteze.size());
-//		Koordinati poteza = moznePoteze.get(randomIndex);
-//		igra.odigraj(poteza);
-//		igramo ();
-//	}
-	
-	
-	// public static Inteligenca racunalnikovaInteligenca = new AlfaBeta(1);
-	public static Inteligenca racunalnikovaInteligenca = new Minimax(1);
-	
-//	private static Random random = new Random ();  // le zaradi metode racunalnikovaPoteza
-//	
-//	public static Koordinati racunalnikovaPoteza(Igra igra) {  // zaï¿½asna metoda za testiranje grafike
-//		List<Koordinati> moznePoteze = igra.vrniVsaPraznaPolja();
-//		int randomIndex = random.nextInt(moznePoteze.size());
-//		Koordinati poteza = moznePoteze.get(randomIndex);
-//		if (igra.igraj(poteza)) return poteza;
-//		assert false;
-//		return null;
-//	}
-	
+	public static Inteligenca racunalnikovaInteligenca = new Inteligenca("Inteligenca s površinsko analizo plošèe");
 	
 	
 	public static void igrajRacunalnikovoPotezo() {
@@ -101,7 +74,7 @@ public class Vodja {
 				//Koordinati poteza = racunalnikovaPoteza(igra);  // zaï¿½asna metoda
 				
 				// try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
-				try {TimeUnit.MILLISECONDS.sleep(750);} catch (Exception e) {};
+				try {TimeUnit.MILLISECONDS.sleep(900);} catch (Exception e) {};
 				
 				// System.out.println(poteza);
 				return poteza;
@@ -112,7 +85,7 @@ public class Vodja {
 				try {poteza = get();} catch (Exception e) {return;};
 				// System.out.println(poteza);
 				if (igra == zacetkaIgra) {
-					igra.igraj(poteza);
+					igra.odigraj(poteza);
 					igramo();
 				}
 			}
@@ -122,7 +95,7 @@ public class Vodja {
 	
 	
 	public static void igrajClovekovoPotezo(Koordinati poteza) {
-		if (igra.igraj(poteza)) clovekNaVrsti = false;
+		if (igra.odigraj(poteza)) clovekNaVrsti = false;
 		igramo();
 	}
 }

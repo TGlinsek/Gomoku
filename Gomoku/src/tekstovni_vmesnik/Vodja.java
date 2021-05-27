@@ -91,7 +91,7 @@ public class Vodja {
 		// System.out.println(moznePoteze.size());
 		int randomIndex = random.nextInt(moznePoteze.size());
 		Koordinati poteza = moznePoteze.get(randomIndex);
-		if (igra.igraj(poteza)) return poteza;
+		if (igra.odigraj(poteza)) return poteza;
 		assert false;  // to se nikoli ne bi smelo zgoditi
 		return null;  // vrnemo nekaj samo zato, ker paè moramo
 	}
@@ -116,7 +116,7 @@ public class Vodja {
 				System.out.println("Napaèen format"); continue;
 			}
 			Koordinati poteza = new Koordinati(x, y);
-			if (igra.igraj(poteza)) return poteza;
+			if (igra.odigraj(poteza)) return poteza;
 			System.out.println(poteza.toString() + " ni možna");
 		}
 	}

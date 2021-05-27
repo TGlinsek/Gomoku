@@ -9,44 +9,6 @@ import splosno.Koordinati;
 
 public class Oceni {
 	
-	/*
-	public static int oceni(Igra igra, Igralec jaz) {
-		int ocena = 0;
-		for (Vrsta v : Igra.VRSTE) {
-			ocena = ocena + oceniVrsto(v, igra, jaz);
-		}
-		return ocena;	
-	}
-	
-	public static int oceniVrsto (Vrsta vrsta, Igra igra, Igralec jaz) {  // vrne visoko vrednost glede na jaz
-		int belih = 0;
-		int crnih = 0;
-		for (int k = 0; k < Igra.dolzinaVrste && (belih == 0 || crnih == 0); k++) {
-			switch (igra.matrika.vrniClen(vrsta.tabelaKoordinat[k])) {
-			case CRNO: crnih += 1; break;
-			case BELO: belih += 1; break;
-			case PRAZNO: break;
-			}
-		}
-		if (crnih > 0 && belih > 0) { return 0; }
-		else if (jaz == Igralec.CRNI) { return crnih - belih; }
-		else { return belih - crnih; }
-	}
-	*/
-	
-
-	public static double oceni(MatrikaVrednosti matrikaVrednosti, Igralec jaz) {
-		Vrednost[][] matrika = matrikaVrednosti.pridobiMatriko();
-		double maks = 0;
-		for (Vrednost[] vrsta : matrika) {
-			for (Vrednost clen : vrsta) {
-				maks = Math.max(clen.vrednost, maks);
-			}
-		}
-		return maks;
-	}
-	
-	
 	private static Polje cePoljeNullGaSpremeni(Polje polje, boolean defenseNamestoAttack, Igralec jaz) {  // jaz je raèunalnik, proti kateremu igramo
 		// èe polje null, to pomeni, da je bilo polje izven matrike
 		if (polje == null) {
