@@ -153,19 +153,6 @@ public class Platno extends JPanel implements MouseListener {
 	
 	
 	private void pobarvajZmagovalnoVrsto(Graphics2D g2) {
-		// pobarvamo ozadje zmagovalne vrste
-//		Set<Vrsta> vrste = null;
-//		if (Vodja.igra != null) {
-//			vrste = Vodja.igra.zmagovalneVrste;
-//		
-//			g2.setColor(barvaPolja);
-//			for (Vrsta vrsta : vrste) {
-//				for (Koordinati k : vrsta.tabelaKoordinat) {
-//					pobarvajOzadjePolja(g2, k);
-//				}
-//			}
-//		}
-		
 		Vrsta vrsta = null;
 		// if (Vodja.igra != null) {vrsta = Vodja.igra.zmagovalnaVrsta();}
 		if (Vodja.igra != null) {vrsta = vrniNakljucniElement(Vodja.igra.zmagovalneVrste);}
@@ -216,13 +203,7 @@ public class Platno extends JPanel implements MouseListener {
 			for (int i = 0; i < Vodja.igra.velikost; i++) {
 				for (int j = 0; j < Vodja.igra.velikost; j++) {
 					Koordinati k = new Koordinati(i, j);
-					/*
-					switch(igra.vrniClen(k)) {
-					case BELO: narisiKamen(g2, k, Color.WHITE); break;
-					case CRNO: narisiKamen(g2, k, Color.BLACK); break;
-					default: break;
-					}
-					*/
+
 					Polje polje = igra.vrniClen(k);
 					if (polje != Polje.PRAZNO) {
 						narisiKamen(g2, k, poljuPrirediBarvo.get(polje));
@@ -258,29 +239,6 @@ public class Platno extends JPanel implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		/*
-		if (Vodja.igra == null) {
-			return;
-		}
-		if (Vodja.clovekNaVrsti) {
-			int x = e.getX();
-			int y = e.getY();
-			int w = (int) (sirinaPolja);
-			int i = x / w;
-			double di = (x % w) / sirinaPolja;
-			int j = y / w;
-			double dj = (y % w) / sirinaPolja;
-			if (
-					0 <= i && i < Vodja.igra.velikost &&
-					0.5 * LINE_WIDTH < di && di < 1.0 - 0.5 * LINE_WIDTH &&
-					0 <= j && j < Vodja.igra.velikost &&
-					0.5 * LINE_WIDTH < dj && dj < 1.0 - 0.5 * LINE_WIDTH
-			) {
-				Vodja.igrajClovekovoPotezo (new Koordinati(i, j));
-			}
-		}
-		repaint();
-		*/
 	}
 	
 	

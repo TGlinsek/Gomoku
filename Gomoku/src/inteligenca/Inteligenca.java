@@ -11,7 +11,7 @@ import splosno.KdoIgra;
 
 public class Inteligenca extends KdoIgra {
 	
-	public Inteligenca (String ime) {
+	public Inteligenca(String ime) {
 		super(ime);
 	}
 	
@@ -28,7 +28,7 @@ public class Inteligenca extends KdoIgra {
 	private static final int NEODLOC = 0;	
 	
 	
-	public Koordinati izberiPotezo (Igra igra) {
+	public Koordinati izberiPotezo(Igra igra) {
 		Igralec jaz = igra.igralecNaPotezi;
 		
 		Vrednost najboljsaPoteza = null;
@@ -63,7 +63,9 @@ public class Inteligenca extends KdoIgra {
 		if (najboljsaPoteza == null) {
 			throw new java.lang.RuntimeException("najboljsaPoteza ne more biti null!");
 		}
-		return nakljucniElementIzSeznama(enakovrednePoteze);
+		Koordinati izbranaPoteza = nakljucniElementIzSeznama(enakovrednePoteze);
+		// System.out.println(izbranaPoteza);
+		return izbranaPoteza;
 	}
 
 }

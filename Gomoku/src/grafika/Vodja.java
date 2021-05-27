@@ -37,7 +37,6 @@ public class Vodja {
 	
 	public static void igramo() {
 		okno.osveziGUI();
-		// igra.spremeniStanjeIgre(igra.zadnjaIgranaPoteza);  // ne dela, ker lahko da je na tem mestu igra.zadnjaIgranaPoteza še null
 		// igra.spremeniStanjeIgre();
 		
 		switch (igra.trenutnoStanje) {
@@ -71,19 +70,17 @@ public class Vodja {
 			@Override
 			protected Koordinati doInBackground() {
 				Koordinati poteza = racunalnikovaInteligenca.izberiPotezo(igra);
-				//Koordinati poteza = racunalnikovaPoteza(igra);  // zaï¿½asna metoda
 				
 				// try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
-				try {TimeUnit.MILLISECONDS.sleep(900);} catch (Exception e) {};
+				try {TimeUnit.MILLISECONDS.sleep(1000);} catch (Exception e) {};
 				
-				// System.out.println(poteza);
 				return poteza;
 			}
 			@Override
 			protected void done () {
 				Koordinati poteza = null;
 				try {poteza = get();} catch (Exception e) {return;};
-				// System.out.println(poteza);
+				
 				if (igra == zacetkaIgra) {
 					igra.odigraj(poteza);
 					igramo();

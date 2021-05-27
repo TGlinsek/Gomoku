@@ -50,7 +50,6 @@ public class Vrsta {
 		if (zacetek > konec) throw new java.lang.RuntimeException("Zaèetek ne more biti veèji kot konec!");
 		Koordinati[] vrsta = new Koordinati[konec - zacetek + 1];
 		for (int i = zacetek; i <= konec; i++) {
-			// vrsta[i - zacetek] = zacetne.pristejVektor(vektor.pomnozi(i));
 			vrsta[i - zacetek] = new Koordinati(zacetne.getX() + i * vektor.getX(), zacetne.getY() + i * vektor.getY());
 		}
 		return new Vrsta(vrsta);

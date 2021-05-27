@@ -14,12 +14,10 @@ public class Igra {
 	public Igralec igralecNaPotezi;
 	public Stanje trenutnoStanje;
 	
-	//public List<Vrsta> okoliskeVrste;
 	public Set<Vrsta> zmagovalneVrste;
 	public int velikost;
 	private static int privzetaVelikost = 15;
 	public static int dolzinaVrste = 5;
-	// public static final List<Vrsta> VRSTE = new LinkedList<Vrsta>();
 	
 	public Koordinati zadnjaIgranaPoteza;  // zadnja poteza igralca, ki je bil nazadnje na vrsti
 	// to definiramo samo zato, da se vsaka nova poteza obarva
@@ -31,7 +29,6 @@ public class Igra {
 		this.trenutnoStanje = Stanje.V_TEKU;
 		// this.velikost = matrika.vrniDimenzije();  // matrika mora prevzeti velikost matrike in ne obratno
 		this.velikost = stranica;
-		// nastaviVrste();
 		this.zmagovalneVrste = Collections.<Vrsta>emptySet();  // to je pomembno, saj drugače zmagovalneVrste == null, kar pa ni dobro, če hočemo recimo pobarvati ozadja vrst
 	}
 	
@@ -72,16 +69,8 @@ public class Igra {
 	}
 	
 	
-	public void spremeniStanjeIgre(/*Koordinati k*/) {
-		// if (resitve(this.igralecNaPotezi, k).size() != 0) {  // lahko bi tudi to dali, ampak problem je, da ne moremo vedno dobiti k (ki naj bi bila nazadnje odigrana poteza)
+	public void spremeniStanjeIgre() {
 		if (zmagovalneVrste.size() != 0) {
-			/*
-			switch (matrika.vrniClen(k)) {
-				case CRNO: trenutnoStanje = Stanje.ZMAGA_CRNI;
-				case BELO: trenutnoStanje = Stanje.ZMAGA_BELI;
-				case PRAZNO: assert false; // tole nevem ce je potrebno, ker se if itak ne izpolni, ce je polje prazno. Ce umaknem, pa tezi
-			}
-			*/
 			switch (this.igralecNaPotezi) {
 			case CRNI: trenutnoStanje = Stanje.ZMAGA_CRNI; break;
 			case BELI: trenutnoStanje = Stanje.ZMAGA_BELI; break;
@@ -98,7 +87,6 @@ public class Igra {
 		if (k == null) throw new java.lang.RuntimeException("Koordinate ne morejo biti null!");
 		if (!matrika.dodajKamen(k, igralecNaPotezi.barvaPoteze())) return false;  // .dodajKamen() vrne true, �e je poteza bila ustrezna, druga�e false
 		zmagovalneVrste = this.resitve(igralecNaPotezi, k);
-		// spremeniStanjeIgre(k);
 		spremeniStanjeIgre();
 		zadnjaIgranaPoteza = k;
 		igralecNaPotezi = igralecNaPotezi.pridobiNasprotnika();

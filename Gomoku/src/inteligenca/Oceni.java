@@ -44,7 +44,7 @@ public class Oceni {
 		} else if (jaz == Igralec.BELI) {
 			mojePolje = Polje.BELO;
 			nasprotnikovoPolje = Polje.CRNO;
-		} else {throw new java.lang.RuntimeException("error!!!");}
+		} else {throw new java.lang.RuntimeException("To se ne bi smelo zgoditi!");}
 		
 		Polje zacasnoPolje;
 		
@@ -56,16 +56,16 @@ public class Oceni {
 				// tukaj loopamo po vseh smereh
 				for (int l = 0; l < 4; l++) {
 					if (matrika.vrniClen(new Koordinati(j, i)) == Polje.BELO || matrika.vrniClen(new Koordinati(j, i)) == Polje.CRNO) {
-						novaMatrika.dodajClen(new Koordinati(j, i), null, l);  // èe zasedeno, nekako poskrbimo, da tistega ne gledamo
-						novaMatrika.dodajClen(new Koordinati(j, i), null, l + 4);  // èe zasedeno, nekako poskrbimo, da tistega ne gledamo
+						novaMatrika.dodajClen(new Koordinati(j, i), null, l);  // èe zasedeno, poskrbimo, da tistega ne gledamo, s tem da nastavimo vrednost null
+						novaMatrika.dodajClen(new Koordinati(j, i), null, l + 4);
 						continue;
 					}
 
-					Koordinati smer = Vrsta.smeri.get(l);
+					Koordinati smer = Vrsta.smeri.get(l);  // vektor smeri
 
-					Vrsta desnaVrsta = Vrsta.vrniVrsto(new Koordinati(j, i), smer, 1, 5);
+					Vrsta desnaVrsta = Vrsta.vrniVrsto(new Koordinati(j, i), smer, 1, 5);  // pogleda peterico v pozitivni smeri vektorja "smer"
 
-					Vrsta levaVrsta = Vrsta.vrniVrsto(new Koordinati(j, i), Vrsta.obrniSmer(smer), 1, 5);
+					Vrsta levaVrsta = Vrsta.vrniVrsto(new Koordinati(j, i), Vrsta.obrniSmer(smer), 1, 5);  // pogleda peterico v negativni smeri vektorja "smer"
 					
 					{
 						int povezanaDolzina = 1;  // kamen, ki bi bil na mestu (j, i)
@@ -94,7 +94,7 @@ public class Oceni {
 							} else if (zacasnoPolje == nasprotnikovoPolje) {
 								break desnaStran;
 							} else {
-								throw new java.lang.RuntimeException("to se ne bi smelo zgoditi");
+								throw new java.lang.RuntimeException("To se ne bi smelo zgoditi");
 							}
 						}
 						prviNasprotnikovKamenNaDesni = desniStevec;
@@ -151,11 +151,14 @@ public class Oceni {
 						*/
 						
 						
-						int razdaljaOdNasprotnikovih = Math.min(razdaljaMedZadnjimMojimInPrvimNasprotnimDesno, razdaljaMedZadnjimMojimInPrvimNasprotnimLevo);
+						int razdaljaOdNasprotnikovih = Math.min(
+								razdaljaMedZadnjimMojimInPrvimNasprotnimDesno + povezanaDesnaDolzina + povezanaDesnaOdmik, 
+								razdaljaMedZadnjimMojimInPrvimNasprotnimLevo + povezanaLevaDolzina + povezanaLevaOdmik
+						);
 						// razdaljo do nasprotnika izraèunamo kot minimum leve in desne razdalje do nasprotnika
+						// gledamo razdaljo srednje komponente, ne pa morebitnih robnih komponent, zato prištejemo še povezano dolžino na strani in njen odmik
 						
-						
-						int stProstorckov = prviNasprotnikovKamenNaDesni - prviNasprotnikovKamenNaLevi - 1;
+						int stProstorckov = prviNasprotnikovKamenNaDesni - prviNasprotnikovKamenNaLevi - 1;  // koliko prostora imamo za grajenje peterice
 						
 						double ocenaPoljaZaVodoravnoSmerAttack;
 						if (stProstorckov < 5) {
@@ -167,23 +170,21 @@ public class Oceni {
 							else {
 								if (razdaljaOdNasprotnikovih >= povezanaDolzina - 1) prviKandidat = povezanaDolzina - 0.05;  // èe nasprotnika ni v bližini
 								else {  // èe je nasprotnik nekoliko blizu, ampak ne preveè (torej, nekje vmes)
-									prviKandidat = povezanaDolzina - 0.05*(povezanaDolzina - razdaljaOdNasprotnikovih);  // za razdaljaOdNasprotnikovih == povezanaDolzina - 1 se oba primera ujemata
+									prviKandidat = povezanaDolzina - 0.05 * (povezanaDolzina - razdaljaOdNasprotnikovih);  // za razdaljaOdNasprotnikovih == povezanaDolzina - 1 se oba primera ujemata
 								}
 							}
 							// prviKandidat = boljsiMax((povezanaDolzina >= 4 ? 4 : 0), prviKandidat);
 							prviKandidat = boljsiMax(((povezanaLevaDolzina + povezanaDolzina >= 4 && povezanaDesnaDolzina + povezanaDolzina >= 4) ? 4 : 0), prviKandidat);  // tole ga naj bi naredilo malo bolj napadalnega
 							
 							
-							double cetrtiKandidat = 0;  // èe imamo situacijo npr. b_bxb_b ali pa bb_bx_bb ali bbb_x_bbb, kjer je x poteza, ki bi jo v tej rundi naredili, potem smo si zagotovili zmago, zato damo oceno 4
+							double drugiKandidat = 0;  // èe imamo situacijo npr. b_bxb_b ali pa bb_bx_bb ali bbb_x_bbb, kjer je x poteza, ki bi jo v tej rundi naredili, potem smo si zagotovili zmago, zato damo oceno 4
 							if (povezanaDesnaOdmik == 1 && 
 									povezanaLevaOdmik == 1 && 
 									(povezanaLevaDolzina + povezanaDolzina) >= 4 &&
 									(povezanaDesnaDolzina + povezanaDolzina) >= 4
-								) cetrtiKandidat = 3.91;  // malo zmanjšal (iz 4), samo zato, ker obstaja veèja možnost, da nasprotnik tega ne opazi
+								) drugiKandidat = 3.91;  // malo zmanjšal (iz 4), samo zato, ker obstaja veèja možnost, da nasprotnik tega ne opazi
 							
-							// ocenaPoljaZaVodoravnoSmerAttack = Math.max(Math.max(Math.max(prviKandidat, drugiKandidat), tretjiKandidat), cetrtiKandidat);
-							// ocenaPoljaZaVodoravnoSmerAttack = prviKandidat;
-							ocenaPoljaZaVodoravnoSmerAttack = Math.max(prviKandidat, cetrtiKandidat);
+							ocenaPoljaZaVodoravnoSmerAttack = Math.max(prviKandidat, drugiKandidat);
 						}
 
 						novaMatrika.dodajClen(new Koordinati(j, i), new Vrednost(ocenaPoljaZaVodoravnoSmerAttack + 0.5), l);  // l (tretji argument): 0 je za vodoravno smer, attack mode, 1 za navpièno, 5 za vodoravno defense, ...
@@ -272,10 +273,14 @@ public class Oceni {
 						razdaljaMedZadnjimMojimInPrvimNasprotnimLevo = nazadnjiMojKamenLevo - leviStevec;  // èe sta èist skupaj, je razdalja 1
 						
 						
-						int razdaljaOdNasprotnikovih = Math.min(razdaljaMedZadnjimMojimInPrvimNasprotnimDesno, razdaljaMedZadnjimMojimInPrvimNasprotnimLevo);
+						int razdaljaOdNasprotnikovih = Math.min(
+								razdaljaMedZadnjimMojimInPrvimNasprotnimDesno + povezanaDesnaDolzina + povezanaDesnaOdmik, 
+								razdaljaMedZadnjimMojimInPrvimNasprotnimLevo + povezanaLevaDolzina + povezanaLevaOdmik
+						);
 						// razdaljo do nasprotnika izraèunamo kot minimum leve in desne razdalje do nasprotnika
+						// gledamo razdaljo srednje komponente, ne pa morebitnih robnih komponent, zato prištejemo še povezano dolžino na strani in njen odmik
 						
-						int stProstorckov = prviNasprotnikovKamenNaDesni - prviNasprotnikovKamenNaLevi - 1;
+						int stProstorckov = prviNasprotnikovKamenNaDesni - prviNasprotnikovKamenNaLevi - 1;  // koliko prostora ima nasprotnik za grajenje peterice
 						
 						
 						double ocenaPoljaZaVodoravnoSmerDefense;
@@ -293,21 +298,19 @@ public class Oceni {
 							else {
 								if (razdaljaOdNasprotnikovih >= povezanaDolzina - 1) prviKandidat = povezanaDolzina - 0.05 + dodatek;  // èe nasprotnika ni v bližini
 								else {  // èe je nasprotnik nekoliko blizu, ampak ne preveè (torej, nekje vmes)
-									prviKandidat = povezanaDolzina - 0.05*(povezanaDolzina - razdaljaOdNasprotnikovih) + dodatek;  // za razdaljaOdNasprotnikovih == povezanaDolzina - 1 se oba primera ujemata
+									prviKandidat = povezanaDolzina - 0.05 * (povezanaDolzina - razdaljaOdNasprotnikovih) + dodatek;  // za razdaljaOdNasprotnikovih == povezanaDolzina - 1 se oba primera ujemata
 								}
 							}
 							
 							
-							double cetrtiKandidat = 0;  // èe imamo situacijo npr. b_bxb_b ali pa bb_bx_bb ali bbb_x_bbb, kjer je x poteza, ki bi jo v tej rundi naredili, potem smo si zagotovili zmago, zato damo oceno 4
+							double drugiKandidat = 0;  // èe imamo situacijo npr. b_bxb_b ali pa bb_bx_bb ali bbb_x_bbb, kjer je x poteza, ki bi jo v tej rundi naredili, potem smo si zagotovili zmago, zato damo oceno 4
 							if (povezanaDesnaOdmik == 1 && 
 									povezanaLevaOdmik == 1 && 
 									(povezanaLevaDolzina + povezanaDolzina) >= 4 &&
 									(povezanaDesnaDolzina + povezanaDolzina) >= 4
-								) cetrtiKandidat = 4;
+								) drugiKandidat = 4;
 							
-							// ocenaPoljaZaVodoravnoSmerDefense = Math.max(Math.max(Math.max(prviKandidat, drugiKandidat), tretjiKandidat), cetrtiKandidat);
-							// ocenaPoljaZaVodoravnoSmerDefense = prviKandidat;
-							ocenaPoljaZaVodoravnoSmerDefense = Math.max(prviKandidat, cetrtiKandidat);
+							ocenaPoljaZaVodoravnoSmerDefense = Math.max(prviKandidat, drugiKandidat);
 						}
 
 						// do sem je koda bila enaka, le da sm attack spremenil v defense
@@ -317,8 +320,8 @@ public class Oceni {
 				}
 			}
 		}
-		System.out.println(novaMatrika);
-		System.out.println(jaz);
+		// System.out.println(novaMatrika);
+		// System.out.println(jaz);
 		return novaMatrika;  // vsak èlen te matrike je seznam z 8 elementi: 4 smeri, 2 naèina (attack, defense)	
 	}
 	
@@ -335,26 +338,41 @@ public class Oceni {
 		return Math.max(a, b) + odmik;
 	}
 	
+	
+	private static double max(double a, double b, double c) {
+		return Math.max(a, Math.max(b, c));
+	}
+	
+	
+	private static double max(double a, double b, double c, double d) {
+		return Math.max(a, max(b, c, d));
+	}
+	
 
-	private static double vsota(Vrednost A, Vrednost B, Vrednost C, Vrednost D) {
+	private static double vsota(Vrednost A, Vrednost B, Vrednost C, Vrednost D, boolean defense) {
 		double a = A.vrednost;
 		double b = B.vrednost;
 		double c = C.vrednost;
 		double d = D.vrednost;
-		double maks = Math.max(a, Math.max(b, Math.max(c, d)));
-		double drugiMaks;
+		double maks = max(a, b, c, d);
+		double drugiMaks;  // druga najboljša izmed vrednosti
 		if (maks == a) {
-			drugiMaks = Math.max(b, Math.max(c, d));
+			drugiMaks = max(b, c, d);
 		} else if (maks == b) {
-			drugiMaks = Math.max(a, Math.max(c, d));
+			drugiMaks = max(a, c, d);
 		} else if (maks == c) {
-			drugiMaks = Math.max(a, Math.max(b, d));
+			drugiMaks = max(a, b, d);
 		} else if (maks == d) {
-			drugiMaks = Math.max(a, Math.max(b, c));
+			drugiMaks = max(a, b, c);
 		} else {
 			throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
 		}
-		if (maks >= 2.95 && drugiMaks >= 2.95) return boljsiMax(boljsiMax(drugiMaks, maks), 3.55);  // èe imamo:
+		if (defense) {  // èe branimo namesto napadamo
+			if (maks >= 2.95 && drugiMaks >= 2.95) return boljsiMax(boljsiMax(drugiMaks, maks), 3.55);
+		} else {
+			if (maks >= 3.45 && drugiMaks >= 3.45) return boljsiMax(boljsiMax(drugiMaks, maks), 4.05);
+		}
+		// èe imamo:
 		/*
 		   _
 		   _
@@ -391,13 +409,11 @@ public class Oceni {
 					ocena = null;
 				}
 				else {
-					double prvaVsota = vsota(WEattack, NSattack, SEattack, SWattack);
-					double drugaVsota = vsota(WEdefense, NSdefense, SEdefense, SWdefense);
+					double prvaVsota = vsota(WEattack, NSattack, SEattack, SWattack, false);
+					double drugaVsota = vsota(WEdefense, NSdefense, SEdefense, SWdefense, true);
 
 					
-					double vrednost = 
-							boljsiMax(prvaVsota, drugaVsota)
-							;
+					double vrednost = boljsiMax(prvaVsota, drugaVsota);
 					ocena = new Vrednost(vrednost);
 				}
 				
@@ -407,7 +423,7 @@ public class Oceni {
 				);
 			}
 		}
-		System.out.println(novaMatrika);
+		// System.out.println(novaMatrika);
 		return novaMatrika;
 	}
 	
