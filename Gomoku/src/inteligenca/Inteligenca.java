@@ -12,7 +12,7 @@ import splosno.KdoIgra;
 public class Inteligenca extends KdoIgra {
 	
 	public Inteligenca() {
-		super("Skupina Matic-Tadej");
+		super("Matic-Tadej");
 	}
 	
 	
