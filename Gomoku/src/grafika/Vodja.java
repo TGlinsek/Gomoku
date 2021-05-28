@@ -29,7 +29,7 @@ public class Vodja {
 	
 	
 	public static void igramoNovoIgro() {
-		igra = new Igra(19);  // nastavi velikost (brez parametra za default)
+		igra = new Igra();  // nastavi velikost (brez parametra za default)
 		okno.nastaviVelikostPoljVPlatnu();
 		igramo();
 	}
@@ -60,7 +60,7 @@ public class Vodja {
 	}
 	
 	
-	public static Inteligenca racunalnikovaInteligenca = new Inteligenca("Inteligenca s površinsko analizo plošèe");
+	public static Inteligenca racunalnikovaInteligenca = new Inteligenca();
 	
 	
 	public static void igrajRacunalnikovoPotezo() {
