@@ -46,6 +46,7 @@ public class Platno extends JPanel implements MouseListener {
 	private static Map<Polje, Color> poljuPrirediBarvo;
 
 	
+	
 	public Platno() {
 		setBackground(barvaOzadja);
 		this.addMouseListener(this);
@@ -63,7 +64,8 @@ public class Platno extends JPanel implements MouseListener {
 		poljuPrirediBarvo = new EnumMap<Polje, Color>(Polje.class);
 		poljuPrirediBarvo.put(Polje.BELO, Color.WHITE);
 		poljuPrirediBarvo.put(Polje.CRNO, Color.BLACK);
-	}
+		
+		}
 	
 	public void spremeniOzadje(Color barva) {
 		setBackground(barva);
@@ -72,7 +74,7 @@ public class Platno extends JPanel implements MouseListener {
 	
 	@Override
 	public Dimension getPreferredSize() {  // privzete dimenzije?
-		return new Dimension(800, 800);
+		return new Dimension(1000, 1000);
 	}
 	
 	
@@ -138,7 +140,6 @@ public class Platno extends JPanel implements MouseListener {
 	}
 	
 	
-	// https://stackoverflow.com/questions/124671/picking-a-random-element-from-a-set
 	private Vrsta vrniNakljucniElement(Set<Vrsta> mnozica) {
 		if (mnozica.size() == 0) return null;
 		Random rand = new Random();

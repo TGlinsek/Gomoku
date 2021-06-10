@@ -28,8 +28,8 @@ public class Vodja {
 	public static boolean clovekNaVrsti = false;
 	
 	
-	public static void igramoNovoIgro() {
-		igra = new Igra();  // nastavi velikost (brez parametra za default)
+	public static void igramoNovoIgro(int velikost) {
+		igra = new Igra(velikost);  // nastavi velikost (brez parametra za default)
 		okno.nastaviVelikostPoljVPlatnu();
 		igramo();
 	}
@@ -47,7 +47,7 @@ public class Vodja {
 		case V_TEKU: 
 			Igralec igralec = igra.igralecNaPotezi;
 			VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
-			clovekNaVrsti = false;  // èe tega ne bi bilo, bi lahko uporabnik "prenesel" potezo iz enega naèina igre v drugega, kar pa se ne sme zgoditi
+			clovekNaVrsti = false;  // ï¿½e tega ne bi bilo, bi lahko uporabnik "prenesel" potezo iz enega naï¿½ina igre v drugega, kar pa se ne sme zgoditi
 			switch (vrstaNaPotezi) {
 			case C: 
 				clovekNaVrsti = true;

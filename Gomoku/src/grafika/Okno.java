@@ -1,11 +1,14 @@
 package grafika;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.EnumMap;
 
 import javax.swing.JFrame;
@@ -31,10 +34,12 @@ public class Okno extends JFrame implements ActionListener {
 	 * JPanel, v katerega igramo
 	 */
 	private Platno platno;
-	
+	private int velikost = 15;
 	
 	// Statusna vrstica v spodnjem delu okna
 	private JLabel status;
+	
+	private JMenuBar menuBar;
 	
 	// Izbire v menujih
 	private JMenuItem igraClovekRacunalnik;
@@ -43,8 +48,20 @@ public class Okno extends JFrame implements ActionListener {
 	private JMenuItem igraRacunalnikRacunalnik;
 	
 	private JMenuItem belaPlosca;
-	private JMenuItem crnaPlosca;
+	private JMenuItem rumenaPlosca;
 	private JMenuItem modraPlosca;
+	private JMenuItem zelenaPlosca;
+	private JMenuItem rdecaPlosca;
+	private JMenuItem rjavaPlosca;
+	
+	private JMenuItem sedem;
+	private JMenuItem deset;
+	private JMenuItem petnajst;
+	private JMenuItem devetnajst;
+	
+	private File soundFile;
+
+
 
 	
 	/**
@@ -56,47 +73,37 @@ public class Okno extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
 		
-		// menu
-		JMenuBar menu_bar = new JMenuBar();
-		this.setJMenuBar(menu_bar);
-		JMenu igra_menu = new JMenu("NOVA IGRA");
-		menu_bar.add(igra_menu);
+		// menu IGRA
+		menuBar = new JMenuBar();
+		menuBar.setPreferredSize(new Dimension(400,50));
+		this.setJMenuBar(menuBar);
 		
-		igraClovekRacunalnik = new JMenuItem("TI proti MENI");
-		igra_menu.add(igraClovekRacunalnik);
-		igraClovekRacunalnik.addActionListener(this);
+		JMenu igra_menu = dodajMenu("NOVA IGRA", new Color(255,102,102));
 		
-		igraRacunalnikClovek = new JMenuItem("JAZ proti TEBI");
-		igra_menu.add(igraRacunalnikClovek);
-		igraRacunalnikClovek.addActionListener(this);
+		igraClovekRacunalnik = dodajMenuItem(igra_menu, "1 IGRALEC", Color.LIGHT_GRAY);
+		igraRacunalnikClovek = dodajMenuItem(igra_menu, "1 IGRALEC", Color.WHITE);
+		igraClovekClovek = dodajMenuItem(igra_menu, "2 IGRALCA", Color.LIGHT_GRAY);
+		igraRacunalnikRacunalnik = dodajMenuItem(igra_menu, "NAVIJAČ", Color.LIGHT_GRAY);
 		
-		igraClovekClovek = new JMenuItem("TI proti FRENDU");
-		igra_menu.add(igraClovekClovek);
-		igraClovekClovek.addActionListener(this);
+		// menu VELIKOST
+		JMenu velikost_menu = dodajMenu("VELIKOST", new Color(51,204,255));
 		
-		igraRacunalnikRacunalnik = new JMenuItem("JAZ proti SEBI");
-		igra_menu.add(igraRacunalnikRacunalnik);
-		igraRacunalnikRacunalnik.addActionListener(this);
-		
+		sedem = dodajMenuItem(velikost_menu, "7x7", Color.LIGHT_GRAY);
+		deset = dodajMenuItem(velikost_menu, "10x10", Color.LIGHT_GRAY);
+		petnajst = dodajMenuItem(velikost_menu, "15x15", Color.LIGHT_GRAY);
+		devetnajst = dodajMenuItem(velikost_menu, "19x19", Color.LIGHT_GRAY);
 
-		// menu2
-		JMenu igra_menu2 = new JMenu("BARVA PLO��E");
-		menu_bar.add(igra_menu2);
+		// menu BARVA
+		JMenu barva_menu = dodajMenu("BARVA PLOŠČE", new Color(102,255,102));
 		
-		belaPlosca = new JMenuItem("BELA");
-		igra_menu2.add(belaPlosca);
-		belaPlosca.addActionListener(this);
-		
-		crnaPlosca = new JMenuItem("�RNA");
-		igra_menu2.add(crnaPlosca);
-		crnaPlosca.addActionListener(this);
-		
-		modraPlosca = new JMenuItem("MODRA");
-		igra_menu2.add(modraPlosca);
-		modraPlosca.addActionListener(this);
-		
-		
-		// igralno polje oz. platno
+		rdecaPlosca = dodajMenuItem(barva_menu, "RDEČA", new Color(255,102,102));
+		modraPlosca = dodajMenuItem(barva_menu, "MODRA", new Color(127, 127, 255));
+		zelenaPlosca = dodajMenuItem(barva_menu, "ZELENA", new Color(0,204,0));
+		rumenaPlosca = dodajMenuItem(barva_menu, "RUMENA", new Color(255,204,51));
+		rjavaPlosca = dodajMenuItem(barva_menu, "RJAVA", new Color(153,102,0));		
+		belaPlosca = dodajMenuItem(barva_menu, "BELA", Color.WHITE);
+				
+		// PLATNO
 		platno = new Platno();
 		
 		GridBagConstraints polje_layout = new GridBagConstraints();
@@ -109,13 +116,9 @@ public class Okno extends JFrame implements ActionListener {
 		
 		// statusna vrstica za sporočila
 		status = new JLabel();
-		status.setFont(
-				new Font(
-						status.getFont().getName(),
-						status.getFont().getStyle(),
-						20
-				)
-		);
+		status.setFont(new Font("Monospaced", Font.BOLD, 30));
+		status.setOpaque(true);
+		status.setBackground(Color.ORANGE);
 		GridBagConstraints status_layout = new GridBagConstraints();
 		status_layout.gridx = 0;
 		status_layout.gridy = 1;
@@ -123,8 +126,28 @@ public class Okno extends JFrame implements ActionListener {
 		getContentPane().add(status, status_layout);
 		
 		status.setText("IZBERI IGRO!");
+				
 	}
 	
+	public JMenu dodajMenu(String naslov, Color barva) {
+		JMenu menu = new JMenu(naslov);
+		menu.setOpaque(true);
+		menu.setBackground(barva);
+		menu.setFont(new Font("Monospaced", Font.BOLD, 30));
+		this.menuBar.add(menu);
+		return menu;
+	}
+	
+	public JMenuItem dodajMenuItem(JMenu menu, String naslov, Color barva) {
+		JMenuItem menuitem = new JMenuItem(naslov);
+		menuitem.setPreferredSize(new Dimension(220,60));
+		menuitem.setOpaque(true);
+		menuitem.setBackground(barva);
+		menuitem.setFont(new Font("Monospaced", Font.BOLD, 22));
+		menu.add(menuitem);
+		menuitem.addActionListener(this);
+		return menuitem;
+	}
 	
 	public void nastaviVelikostPoljVPlatnu() {
 		this.platno.nastaviVelikostPolj();
@@ -137,28 +160,43 @@ public class Okno extends JFrame implements ActionListener {
 			Vodja.vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
 			Vodja.vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.C);
 			Vodja.vrstaIgralca.put(Igralec.BELI, VrstaIgralca.R);
-			Vodja.igramoNovoIgro();
+			Vodja.igramoNovoIgro(this.velikost);
 		} else if (e.getSource() == igraRacunalnikClovek) {
 			Vodja.vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
 			Vodja.vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.R);
 			Vodja.vrstaIgralca.put(Igralec.BELI, VrstaIgralca.C);
-			Vodja.igramoNovoIgro();
+			Vodja.igramoNovoIgro(this.velikost);
 		} else if (e.getSource() == igraClovekClovek) {
 			Vodja.vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
 			Vodja.vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.C);
 			Vodja.vrstaIgralca.put(Igralec.BELI, VrstaIgralca.C);
-			Vodja.igramoNovoIgro();
+			Vodja.igramoNovoIgro(this.velikost);
 		} else if (e.getSource() == igraRacunalnikRacunalnik) {
 			Vodja.vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
 			Vodja.vrstaIgralca.put(Igralec.CRNI, VrstaIgralca.R);
 			Vodja.vrstaIgralca.put(Igralec.BELI, VrstaIgralca.R);
-			Vodja.igramoNovoIgro();
+			Vodja.igramoNovoIgro(this.velikost);
+		} 
+		else if (e.getSource() == sedem) {
+			this.velikost = 7;
+		} else if (e.getSource() == deset) {
+			this.velikost = 10;
+		} else if (e.getSource() == petnajst) {
+			this.velikost = 15;
+		} else if (e.getSource() == devetnajst) {
+			this.velikost = 19;
 		} else if (e.getSource() == belaPlosca) {
 			platno.spremeniOzadje(Color.WHITE);
-		} else if (e.getSource() == crnaPlosca) {
-			platno.spremeniOzadje(Color.BLACK);
+		} else if (e.getSource() == rumenaPlosca) {
+			platno.spremeniOzadje(new Color(255,204,51));
 		} else if (e.getSource() == modraPlosca) {
-			platno.spremeniOzadje(new Color(127, 127, 255));  // modro-vijoli�na barva
+			platno.spremeniOzadje(new Color(127, 127, 255));
+		}else if (e.getSource() == rdecaPlosca) {
+			platno.spremeniOzadje(new Color(255,102,102));
+		}else if (e.getSource() == zelenaPlosca) {
+			platno.spremeniOzadje(new Color(0,204,0));
+		}else if (e.getSource() == rjavaPlosca) {
+			platno.spremeniOzadje(new Color(153,102,0));
 		}
 	}
 	
@@ -173,7 +211,8 @@ public class Okno extends JFrame implements ActionListener {
 			case NEODLOCENO: status.setText("Neodločeno!"); break;
 			case V_TEKU:
 				status.setText("Na potezi je " + Vodja.igra.igralecNaPotezi + 
-						" - " + Vodja.vrstaIgralca.get(Vodja.igra.igralecNaPotezi)); 
+						" (" + Vodja.vrstaIgralca.get(Vodja.igra.igralecNaPotezi) + 
+						")"); 
 				break;
 			case ZMAGA_CRNI:
 				status.setText("ZMAGAL ČRNI - " + 
