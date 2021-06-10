@@ -155,7 +155,6 @@ public class Platno extends JPanel implements MouseListener {
 	
 	private void pobarvajZmagovalnoVrsto(Graphics2D g2) {
 		Vrsta vrsta = null;
-		// if (Vodja.igra != null) {vrsta = Vodja.igra.zmagovalnaVrsta();}
 		if (Vodja.igra != null) {vrsta = vrniNakljucniElement(Vodja.igra.zmagovalneVrste);}
 		if (vrsta != null) {
 			g2.setColor(barvaPolja);
@@ -165,6 +164,7 @@ public class Platno extends JPanel implements MouseListener {
 		}
 		
 	}
+	
 	
 	private void pobarvajNajnovejsoPotezo(Graphics2D g2) {
 		if (Vodja.igra.zadnjaIgranaPoteza != null) {

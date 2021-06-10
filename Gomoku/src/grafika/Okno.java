@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.border.LineBorder;
 
 import grafika.Vodja;
 import tekstovni_vmesnik.VrstaIgralca;
@@ -39,6 +40,7 @@ public class Okno extends JFrame implements ActionListener {
 	// Statusna vrstica v spodnjem delu okna
 	private JLabel status;
 	
+	//vrstica z izbirnimi menuji
 	private JMenuBar menuBar;
 	
 	// Izbire v menujih
@@ -52,17 +54,12 @@ public class Okno extends JFrame implements ActionListener {
 	private JMenuItem modraPlosca;
 	private JMenuItem zelenaPlosca;
 	private JMenuItem rdecaPlosca;
-	private JMenuItem rjavaPlosca;
 	
 	private JMenuItem sedem;
 	private JMenuItem deset;
 	private JMenuItem petnajst;
 	private JMenuItem devetnajst;
 	
-	private File soundFile;
-
-
-
 	
 	/**
 	 * KONSTRUKTOR - ustvari novo glavno okno in prični igrati igro.
@@ -78,29 +75,28 @@ public class Okno extends JFrame implements ActionListener {
 		menuBar.setPreferredSize(new Dimension(400,50));
 		this.setJMenuBar(menuBar);
 		
-		JMenu igra_menu = dodajMenu("NOVA IGRA", new Color(255,102,102));
+		JMenu igra_menu = dodajMenu("NOVA IGRA", new Color(255,230,0));
 		
-		igraClovekRacunalnik = dodajMenuItem(igra_menu, "1 IGRALEC", Color.LIGHT_GRAY);
-		igraRacunalnikClovek = dodajMenuItem(igra_menu, "1 IGRALEC", Color.WHITE);
+		igraClovekRacunalnik = dodajMenuItem(igra_menu, "1 IGRALEC (ČRNI)", Color.LIGHT_GRAY);
+		igraRacunalnikClovek = dodajMenuItem(igra_menu, "1 IGRALEC (BELI)", Color.WHITE);
 		igraClovekClovek = dodajMenuItem(igra_menu, "2 IGRALCA", Color.LIGHT_GRAY);
-		igraRacunalnikRacunalnik = dodajMenuItem(igra_menu, "NAVIJAČ", Color.LIGHT_GRAY);
+		igraRacunalnikRacunalnik = dodajMenuItem(igra_menu, "NAVIJAČ", Color.WHITE);
 		
 		// menu VELIKOST
-		JMenu velikost_menu = dodajMenu("VELIKOST", new Color(51,204,255));
+		JMenu velikost_menu = dodajMenu("VELIKOST", new Color(255,230,0));
 		
 		sedem = dodajMenuItem(velikost_menu, "7x7", Color.LIGHT_GRAY);
-		deset = dodajMenuItem(velikost_menu, "10x10", Color.LIGHT_GRAY);
+		deset = dodajMenuItem(velikost_menu, "10x10", Color.WHITE);
 		petnajst = dodajMenuItem(velikost_menu, "15x15", Color.LIGHT_GRAY);
-		devetnajst = dodajMenuItem(velikost_menu, "19x19", Color.LIGHT_GRAY);
+		devetnajst = dodajMenuItem(velikost_menu, "19x19", Color.WHITE);
 
 		// menu BARVA
-		JMenu barva_menu = dodajMenu("BARVA PLOŠČE", new Color(102,255,102));
+		JMenu barva_menu = dodajMenu("BARVA PLOŠČE", new Color(255,230,0));
 		
-		rdecaPlosca = dodajMenuItem(barva_menu, "RDEČA", new Color(255,102,102));
-		modraPlosca = dodajMenuItem(barva_menu, "MODRA", new Color(127, 127, 255));
-		zelenaPlosca = dodajMenuItem(barva_menu, "ZELENA", new Color(0,204,0));
-		rumenaPlosca = dodajMenuItem(barva_menu, "RUMENA", new Color(255,204,51));
-		rjavaPlosca = dodajMenuItem(barva_menu, "RJAVA", new Color(153,102,0));		
+		rdecaPlosca = dodajMenuItem(barva_menu, "RDEČA", new Color(255,142,142));
+		modraPlosca = dodajMenuItem(barva_menu, "MODRA", new Color(137, 137, 255));
+		zelenaPlosca = dodajMenuItem(barva_menu, "ZELENA", new Color(132,204,132));
+		rumenaPlosca = dodajMenuItem(barva_menu, "RUMENA", new Color(255,234,81));		
 		belaPlosca = dodajMenuItem(barva_menu, "BELA", Color.WHITE);
 				
 		// PLATNO
@@ -118,7 +114,7 @@ public class Okno extends JFrame implements ActionListener {
 		status = new JLabel();
 		status.setFont(new Font("Monospaced", Font.BOLD, 30));
 		status.setOpaque(true);
-		status.setBackground(Color.ORANGE);
+		status.setBackground(new Color(255,230,0));
 		GridBagConstraints status_layout = new GridBagConstraints();
 		status_layout.gridx = 0;
 		status_layout.gridy = 1;
@@ -133,6 +129,7 @@ public class Okno extends JFrame implements ActionListener {
 		JMenu menu = new JMenu(naslov);
 		menu.setOpaque(true);
 		menu.setBackground(barva);
+		menu.setBorder(new LineBorder(Color.BLACK));
 		menu.setFont(new Font("Monospaced", Font.BOLD, 30));
 		this.menuBar.add(menu);
 		return menu;
@@ -152,8 +149,7 @@ public class Okno extends JFrame implements ActionListener {
 	public void nastaviVelikostPoljVPlatnu() {
 		this.platno.nastaviVelikostPolj();
 	}
-	
-	
+		
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == igraClovekRacunalnik) {
@@ -188,15 +184,13 @@ public class Okno extends JFrame implements ActionListener {
 		} else if (e.getSource() == belaPlosca) {
 			platno.spremeniOzadje(Color.WHITE);
 		} else if (e.getSource() == rumenaPlosca) {
-			platno.spremeniOzadje(new Color(255,204,51));
+			platno.spremeniOzadje(new Color(255,234,81));
 		} else if (e.getSource() == modraPlosca) {
-			platno.spremeniOzadje(new Color(127, 127, 255));
+			platno.spremeniOzadje(new Color(137, 137, 255));
 		}else if (e.getSource() == rdecaPlosca) {
-			platno.spremeniOzadje(new Color(255,102,102));
+			platno.spremeniOzadje(new Color(255,142,142));
 		}else if (e.getSource() == zelenaPlosca) {
-			platno.spremeniOzadje(new Color(0,204,0));
-		}else if (e.getSource() == rjavaPlosca) {
-			platno.spremeniOzadje(new Color(153,102,0));
+			platno.spremeniOzadje(new Color(132,204,132));
 		}
 	}
 	
@@ -206,7 +200,6 @@ public class Okno extends JFrame implements ActionListener {
 			status.setText("Igra ne poteka");
 		}
 		else {
-			// Vodja.igra.spremeniStanjeIgre(Vodja.igra.zadnjaIgranaPoteza);
 			switch(Vodja.igra.trenutnoStanje) {
 			case NEODLOCENO: status.setText("Neodločeno!"); break;
 			case V_TEKU:
