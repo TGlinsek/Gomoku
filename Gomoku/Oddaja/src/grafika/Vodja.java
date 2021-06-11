@@ -1,9 +1,6 @@
 package grafika;
 
-import java.util.Random;
 import java.util.Map;
-import java.util.List;
-
 import javax.swing.SwingWorker;
 
 import inteligenca.Inteligenca;
@@ -27,9 +24,9 @@ public class Vodja {
 	
 	public static boolean clovekNaVrsti = false;
 	
-	
+	// ustvari novo igro z izbrano velikostjo polja (default 15)
 	public static void igramoNovoIgro(int velikost) {
-		igra = new Igra(velikost);  // nastavi velikost (brez parametra za default)
+		igra = new Igra(velikost);
 		okno.nastaviVelikostPoljVPlatnu();
 		igramo();
 	}
@@ -37,7 +34,6 @@ public class Vodja {
 	
 	public static void igramo() {
 		okno.osveziGUI();
-		// igra.spremeniStanjeIgre();
 		
 		switch (igra.trenutnoStanje) {
 		case ZMAGA_CRNI: 
@@ -47,7 +43,7 @@ public class Vodja {
 		case V_TEKU: 
 			Igralec igralec = igra.igralecNaPotezi;
 			VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
-			clovekNaVrsti = false;  // �e tega ne bi bilo, bi lahko uporabnik "prenesel" potezo iz enega na�ina igre v drugega, kar pa se ne sme zgoditi
+			clovekNaVrsti = false;  // ce tega ne bi bilo, bi lahko uporabnik "prenesel" potezo iz enega nacina igre v drugega, kar pa se ne sme zgoditi
 			switch (vrstaNaPotezi) {
 			case C: 
 				clovekNaVrsti = true;
@@ -70,8 +66,7 @@ public class Vodja {
 			@Override
 			protected Koordinati doInBackground() {
 				Koordinati poteza = racunalnikovaInteligenca.izberiPotezo(igra);
-				
-				// try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
+				//zakasnitev racunalnikove poteze za npr. 1 sekundo
 				try {TimeUnit.MILLISECONDS.sleep(1000);} catch (Exception e) {};
 				
 				return poteza;

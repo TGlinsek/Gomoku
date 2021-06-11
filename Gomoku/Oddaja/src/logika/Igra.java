@@ -1,16 +1,14 @@
 package logika;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import splosno.Koordinati;
 
 public class Igra {
 	
-	public Matrika matrika; // prej je bil tale private...a mora bit?
+	public Matrika matrika; 
 	public Igralec igralecNaPotezi;
 	public Stanje trenutnoStanje;
 	
@@ -23,29 +21,23 @@ public class Igra {
 	// to definiramo samo zato, da se vsaka nova poteza obarva
 	
 	
+	// 1. KONSTRUKTOR  s parametrom velikosti igre
 	public Igra(int stranica) {
 		this.matrika = new Matrika(stranica);
-		this.igralecNaPotezi = Igralec.CRNI;  // baje crni vedno zacne
+		this.igralecNaPotezi = Igralec.CRNI;  // crni zacne
 		this.trenutnoStanje = Stanje.V_TEKU;
-		// this.velikost = matrika.vrniDimenzije();  // matrika mora prevzeti velikost matrike in ne obratno
 		this.velikost = stranica;
 		this.zmagovalneVrste = Collections.<Vrsta>emptySet();  // to je pomembno, saj drugače zmagovalneVrste == null, kar pa ni dobro, če hočemo recimo pobarvati ozadja vrst
 	}
 	
-	
-	@Override
-	public String toString() {
-		return this.matrika.toString();
-	}
-	
-	
+	// 2. KONSTRUKTOR  brez paraetra - vzame default velikost
 	public Igra() {
 		this(privzetaVelikost);  // klice konstruktor s parametrom
 	}
 	
+	// 3. KONSTRUKTOR  s parametrom igra in naredi njeno kopijo (rabimo za inteligenco)
 	public Igra(Igra igra) {
 		Polje[][] mat = igra.matrika.pridobiMatriko();
-		// this.velikost = matrika.vrniDimenzije();
 		this.velikost = igra.velikost;
 		this.matrika = new Matrika(velikost);
 		Polje[][] kopijaMat = this.matrika.pridobiMatriko();
@@ -102,4 +94,10 @@ public class Igra {
 	public Set<Vrsta> resitve(Igralec p, Koordinati k) {  // koordinate, kamor smo nazadnje postavili figuro
 		return this.matrika.vrniResitev(p, k);
 	}  // vrne prazno, če ni rešitev (če ni konec igre), drugače vrne vse rešitve
+
+
+	@Override
+	public String toString() {
+		return this.matrika.toString();
+	}
 }

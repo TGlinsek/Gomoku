@@ -16,13 +16,9 @@ import java.util.Set;
 
 import javax.swing.JPanel;
 
-import grafika.Vodja;
-
 import logika.Igra;
-// import logika.Igralec;
 import logika.Polje;
 import logika.Vrsta;
-// import tekstovni_vmesnik.VrstaIgralca;
 import splosno.Koordinati;
 
 
@@ -46,13 +42,11 @@ public class Platno extends JPanel implements MouseListener {
 	private static Map<Polje, Color> poljuPrirediBarvo;
 
 	
-	
+	// konstruktor
 	public Platno() {
 		setBackground(barvaOzadja);
 		this.addMouseListener(this);
-		
-		// sirinaPolja = sirinaPolja();  // na tem mestu je igra �e null, zato ne moremo pridobiti njene velikosti
-		
+				
 		barvaRoba = Color.BLACK;
 		barvaMreze = Color.BLACK;
 		barvaPolja = new Color(255, 255, 196);
@@ -73,7 +67,7 @@ public class Platno extends JPanel implements MouseListener {
 	
 	
 	@Override
-	public Dimension getPreferredSize() {  // privzete dimenzije?
+	public Dimension getPreferredSize() {  // privzete dimenzije platna
 		return new Dimension(1000, 1000);
 	}
 	
@@ -118,7 +112,6 @@ public class Platno extends JPanel implements MouseListener {
 				premer, 
 				premer
 		);
-		
 		g2.setColor(barvaRoba);
 		g2.setStroke(debelinaRoba);
 		g2.drawOval(
@@ -233,8 +226,6 @@ public class Platno extends JPanel implements MouseListener {
 		narisiMrezo(g2);
 		
 		narisiKamne(g2);
-		
-		// repaint();  // to samo kli�e paintComponent
 	}
 	
 	

@@ -25,6 +25,23 @@ public class Vrsta {
 	}
 	
 	
+	public static Koordinati obrniSmer(Koordinati smer) {
+		return new Koordinati(-smer.getX(), -smer.getY());
+	}
+	
+	
+	public static Vrsta vrniVrsto(Koordinati zacetne, Koordinati vektor, int zacetek, int konec) {
+		/* Primer:
+		vrniVrsto((5, 6), (1, 2), -3, 2) ti da vrsto [(2, 0), (3, 2), (4, 4), (5, 6), (6, 8), (7, 10)]
+		*/
+		if (zacetek > konec) throw new java.lang.RuntimeException("Zaï¿½etek ne more biti veï¿½ji kot konec!");
+		Koordinati[] vrsta = new Koordinati[konec - zacetek + 1];
+		for (int i = zacetek; i <= konec; i++) {
+			vrsta[i - zacetek] = new Koordinati(zacetne.getX() + i * vektor.getX(), zacetne.getY() + i * vektor.getY());
+		}
+		return new Vrsta(vrsta);
+	}
+	
 	@Override
 	public String toString() {
 		String niz = "[";
@@ -35,23 +52,5 @@ public class Vrsta {
 		niz = niz.substring(0, niz.length() - 2);
 		niz += "]";
 		return niz;
-	}
-	
-	
-	public static Koordinati obrniSmer(Koordinati smer) {
-		return new Koordinati(-smer.getX(), -smer.getY());
-	}
-	
-	
-	public static Vrsta vrniVrsto(Koordinati zacetne, Koordinati vektor, int zacetek, int konec) {
-		/* Primer:
-		vrniVrsto((5, 6), (1, 2), -3, 2) ti da vrsto [(2, 0), (3, 2), (4, 4), (5, 6), (6, 8), (7, 10)]
-		*/
-		if (zacetek > konec) throw new java.lang.RuntimeException("Zaèetek ne more biti veèji kot konec!");
-		Koordinati[] vrsta = new Koordinati[konec - zacetek + 1];
-		for (int i = zacetek; i <= konec; i++) {
-			vrsta[i - zacetek] = new Koordinati(zacetne.getX() + i * vektor.getX(), zacetne.getY() + i * vektor.getY());
-		}
-		return new Vrsta(vrsta);
 	}
 }

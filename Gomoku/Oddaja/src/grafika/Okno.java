@@ -7,8 +7,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.EnumMap;
 
 import javax.swing.JFrame;
@@ -18,9 +16,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.border.LineBorder;
 
-import grafika.Vodja;
 import tekstovni_vmesnik.VrstaIgralca;
-import logika.Igra;
 import logika.Igralec;
 
 
